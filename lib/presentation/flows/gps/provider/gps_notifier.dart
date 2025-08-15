@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart' show MissingPluginException;
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart' as ph;
 import '../../../base/base_provider.dart';
 import '../../../base/base_state_notifier.dart';
 import 'gps_action.dart';
 import 'gps_state.dart';
-import 'package:permission_handler/permission_handler.dart' as ph;
 
 class GpsNotifier extends BaseStateNotifier<GpsState, GpsAction> {
   GpsNotifier(Ref ref) : super(state: const GpsState(), ref: ref) {

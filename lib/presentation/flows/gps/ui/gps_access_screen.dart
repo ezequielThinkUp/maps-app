@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:geolocator/geolocator.dart' as geo;
 import '../../../base/base_stateful_widget.dart';
 import '../../../base/content_state/content_state_widget.dart';
 import '../provider/gps_notifier.dart';
@@ -8,7 +9,6 @@ import '../provider/gps_action.dart';
 import '../provider/gps_state.dart';
 import '../widgets/widgets.dart';
 import '../../maps/ui/map_screen.dart';
-import 'package:geolocator/geolocator.dart' as geo;
 
 class GpsAccessScreen extends ConsumerStatefulWidget {
   const GpsAccessScreen({super.key});
