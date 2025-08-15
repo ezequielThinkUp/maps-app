@@ -1,0 +1,160 @@
+---
+description: ""
+globs: []
+alwaysApply: false
+---
+
+---
+description: "Aplicar esta regla cuando se cree o modifique un StateNotifier, Provider o lógica de estado con Riverpod."
+globs: []
+alwaysApply: false
+---
+
+# 🌿 Regla – Uso de clases base con Riverpod
+
+Este proyecto utiliza una clase base personalizada `BaseStateNotifier<S, A>` para gestionar el estado, las acciones y los side-effects de forma unificada.  
+Todas las clases `Notifier` deben extender esta base y respetar su estructura.
+
+---
+
+## ✅ StateNotifiers
+
+- Toda clase de flujo que maneje estado debe extender `BaseStateNotifier<State, Action>`.
+- Debe implementar el método `reducer({required A action})`.
+- Debe inicializar el estado desde el constructor `super(state: ..., ref: ref)`.
+
+```dart
+class HomeNotifier extends BaseStateNotifier<HomeState, HomeAction> {
+  final GetProductsUseCase _getProductsUseCase;
+
+  HomeNotifier(this._getProductsUseCase, super.ref)
+      : super(state: const HomeState());
+
+  @override
+  void reducer({required HomeAction action}) {
+    switch (action) {
+      case HomeAction.load:
+        _loadProducts();
+        break;
+    }
+  }
+
+  Future<void> _loadProducts() async {
+    showLoading();
+    await callService<List<Product>>(
+      service: () => _getProductsUseCase(),
+      onSuccess: (products) {
+        state = state.copyWith(products: products);
+        showContent();
+      },
+    );
+  }
+}
+```
+
+## ✅ Providers
+Para exponer un notifier, usar `BaseProvider<Notifier, State>()`.
+
+```dart
+final homeProvider = BaseProvider<HomeNotifier, HomeState>(
+  (ref) => HomeNotifier(ref.watch(getProductsUseCaseProvider), ref),
+);
+```
+
+## ✅ Métodos disponibles en la base
+Todas las clases que extiendan `BaseStateNotifier` pueden usar:
+
+- `callService<T>()` → para ejecutar servicios de forma unificada con manejo de `Either<HttpError, T>`
+- `showLoading()` y `showContent()` → para manipular el estado visual usando `contentStateNotifierProvider`
+- `ref` → para acceder a otros providers si es necesario
+
+## ⚠️ Evitar
+
+- ❌ Usar `StateNotifier<T>` directamente.
+- ❌ Lógica de estado sin pasar por `reducer`.
+- ❌ Asignación directa de `state` sin respetar los pasos de `callService`, `showLoading`, `showContent`.
+- ❌ No usar `copyWith()` para modificar partes del estado fuera del metodo `reducer()`.
+
+---
+
+### 8. Definición de Acciones (`Action`)
+
+Cada flujo debe tener una clase de acciones (`Action`) que define los eventos que modifican el estado. Estas acciones son utilizadas dentro del `reducer()` del `BaseStateNotifier<State, Action>`.
+
+#### ✅ Convenciones
+
+- Definir una clase `sealed` con el sufijo `Action`, por ejemplo `HomeAction`, `LoginAction`, etc.
+- Crear una clase por cada tipo de acción, con sus propiedades necesarias.
+- El `reducer({required A action})` en el `Notifier` debe hacer `switch` sobre esas acciones y ejecutar la lógica correspondiente.
+
+#### 🧩 Ejemplo
+
+```dart
+sealed class HomeAction {}
+
+class LoadAction extends HomeAction {
+  final List<Photo> photos;
+
+  LoadAction({this.photos = const []});
+}
+```
+
+Ejemplo de uso en el reducer del Notifier
+
+```dart
+@override
+void reducer({required HomeAction action}) {
+  switch (action) {
+    case LoadAction():
+      state = state.copyWith(photos: action.photos);
+      break;
+  }
+}
+```
+
+---
+
+### 7. Estructura del estado (`State`)
+
+Cada flujo debe tener su clase de estado definida de forma clara y predecible.
+
+- Los estados deben ser clases simples con propiedades finales (o mutables si se justifica).
+- Deben incluir un método `copyWith()` para permitir la actualización inmutable del estado.
+- Las propiedades deben tener valores por defecto seguros, o ser opcionales (`?`).
+- No deben contener lógica de negocio ni dependencias externas.
+
+> Estos `State` son utilizados por los `BaseStateNotifier<State, Action>` y reflejan la UI.
+
+#### 🧩 Ejemplo de estado correcto
+
+```dart
+import 'package:template/domain/entities/photo.dart';
+
+class DetailState {
+  final Photo? photo;
+  final int like;
+  final int dislike;
+
+  DetailState({
+    this.photo,
+    this.like = 0,
+    this.dislike = 0,
+  });
+
+  DetailState copyWith({
+    Photo? photo,
+    int? like,
+    int? dislike,
+  }) {
+    return DetailState(
+      photo: photo ?? this.photo,
+      like: like ?? this.like,
+      dislike: dislike ?? this.dislike,
+    );
+  }
+}
+```
+
+---
+
+ 
