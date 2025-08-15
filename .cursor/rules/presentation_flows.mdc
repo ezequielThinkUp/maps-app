@@ -1,0 +1,282 @@
+# 🖥️ Regla – Flujos de Presentación (Flows)
+
+Esta regla guía la estructura completa de un flujo de UI. Cada flujo debe organizarse por feature e incluir pantalla, notifier, provider, state, action y widgets específicos.
+
+---
+
+## ✅ Organización por flujo
+
+Cada carpeta dentro de `lib/presentation/flows/` debe contener:
+
+- Una `Screen` que extienda `BaseStatefulWidget`
+- El primer widget de la `Screen` debe ser `ContentStateWidget` ubicado en: lib/presentation/base/content_state/content_state_widget.dart
+- Un `Notifier` que extienda `BaseStateNotifier<State, Action>`
+- Un `Provider` con `BaseProvider<Notifier, State>`
+- Archivo `state.dart` para el estado del flujo
+- Archivo `action.dart` con la sealed class de acciones
+- Widgets específicos y archivo barril (`widgets.dart`, etc.)
+
+---
+
+## ✅ Pantallas
+
+Usar siempre `BaseStatefulWidget` como clase base. Esto garantiza suscripciones automáticas a navegación y alertas desde el notifier.
+
+```dart
+abstract class BaseStatefulWidget<T extends ConsumerStatefulWidget>
+    extends ConsumerState<T> with BaseScreen {
+  Widget buildView(BuildContext context);
+
+  @override
+  Widget build(BuildContext context) {
+    subscribeAlert(ref: ref);
+    subscribeNavigation(
+      ref: ref,
+      context: context,
+    );
+    return buildView(context);
+  }
+}
+
+Ejemplo de pantalla
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends BaseStatefulWidget<LoginScreen> {
+  @override
+  Widget buildView(BuildContext context) {
+    final state = ref.watch(loginProvider);
+    return Column(
+      children: [
+        Text(state.email),
+        // ...
+      ],
+    );
+  }
+}
+```
+
+---
+
+### 🚦 Navegación
+
+Cada flujo debe tener su propia configuración de rutas siguiendo este patrón:
+
+```dart
+class HomeRouter {
+  static const String homeRouteName = 'Home';
+
+  static GoRoute getRoute() {
+    return GoRoute(
+      name: homeRouteName,
+      path: '/Home',
+      pageBuilder: (context, state) => MaterialPage<void>(
+        key: state.pageKey,
+        child: HomeScreen(),
+        name: homeRouteName,
+      ),
+      routes: [SettingsRouter.getRoute()], // Sub-rutas si aplica
+    );
+  }
+}
+```
+
+📁 Ubicación del archivo:
+lib/presentation/flows/{feature}/nav/{feature}_route.dart
+
+## 🧠 Buenas prácticas de diseño
+
+- **Abstraer siempre que sea posible**: mover bloques de UI a widgets privados o reutilizables.
+- Es preferible tener **muchos widgets pequeños y limpios** que una `Screen` con código largo y difícil de mantener.
+- Seguir el principio de **responsabilidad única** y mantener la legibilidad.
+
+⚠️ Evitar
+❌ Usar ConsumerWidget o HookConsumerWidget en flows → usar BaseStatefulWidget.
+
+❌ Usar setState() en pantallas que ya usan Riverpod.
+❌ Llamar a servicios directamente desde la pantalla.
+
+---
+
+## 📁 Estructura de carpetas recomendada
+
+```
+lib/presentation/flows/
+├── auth/
+│   ├── login/
+│   │   ├── login_screen.dart
+│   │   ├── login_notifier.dart
+│   │   ├── login_provider.dart
+│   │   ├── login_state.dart
+│   │   ├── login_action.dart
+│   │   ├── widgets/
+│   │   │   ├── login_form.dart
+│   │   │   ├── login_button.dart
+│   │   │   └── widgets.dart
+│   │   └── nav/
+│   │       └── login_route.dart
+│   └── register/
+│       └── [estructura similar]
+├── home/
+│   ├── home_screen.dart
+│   ├── home_notifier.dart
+│   ├── home_provider.dart
+│   ├── home_state.dart
+│   ├── home_action.dart
+│   ├── widgets/
+│   └── nav/
+└── settings/
+    └── [estructura similar]
+```
+
+---
+
+## 🔄 Flujo de trabajo recomendado
+
+1. **Crear la estructura de carpetas** para el nuevo flujo
+2. **Definir el estado** en `state.dart`
+3. **Definir las acciones** en `action.dart`
+4. **Implementar el notifier** con la lógica de negocio
+5. **Crear el provider** que expone el notifier
+6. **Implementar la pantalla** usando `BaseStatefulWidget`
+7. **Extraer widgets** específicos a la carpeta `widgets/`
+8. **Configurar la navegación** en `nav/`
+9. **Crear archivo barril** para exports
+
+---
+
+## 📝 Ejemplos de implementación
+
+### State
+```dart
+class LoginState extends Equatable {
+  final String email;
+  final String password;
+  final bool isLoading;
+  final String? error;
+
+  const LoginState({
+    this.email = '',
+    this.password = '',
+    this.isLoading = false,
+    this.error,
+  });
+
+  LoginState copyWith({
+    String? email,
+    String? password,
+    bool? isLoading,
+    String? error,
+  }) {
+    return LoginState(
+      email: email ?? this.email,
+      password: password ?? this.password,
+      isLoading: isLoading ?? this.isLoading,
+      error: error ?? this.error,
+    );
+  }
+
+  @override
+  List<Object?> get props => [email, password, isLoading, error];
+}
+```
+
+### Action
+```dart
+sealed class LoginAction {}
+
+class UpdateEmailAction extends LoginAction {
+  final String email;
+  UpdateEmailAction(this.email);
+}
+
+class UpdatePasswordAction extends LoginAction {
+  final String password;
+  UpdatePasswordAction(this.password);
+}
+
+class LoginSubmitAction extends LoginAction {}
+
+class LoginSuccessAction extends LoginAction {}
+
+class LoginErrorAction extends LoginAction {
+  final String error;
+  LoginErrorAction(this.error);
+}
+```
+
+### Notifier
+```dart
+class LoginNotifier extends BaseStateNotifier<LoginState, LoginAction> {
+  LoginNotifier(Ref ref) : super(state: const LoginState(), ref: ref);
+
+  @override
+  void reducer({required LoginAction action}) {
+    switch (action) {
+      case UpdateEmailAction(:final email):
+        state = state.copyWith(email: email);
+        break;
+      case UpdatePasswordAction(:final password):
+        state = state.copyWith(password: password);
+        break;
+      case LoginSubmitAction():
+        _handleLogin();
+        break;
+      case LoginSuccessAction():
+        state = state.copyWith(isLoading: false, error: null);
+        break;
+      case LoginErrorAction(:final error):
+        state = state.copyWith(isLoading: false, error: error);
+        break;
+    }
+  }
+
+  void _handleLogin() {
+    state = state.copyWith(isLoading: true, error: null);
+    // Lógica de login aquí
+  }
+}
+```
+
+### Provider
+```dart
+final loginProvider = BaseProvider<LoginNotifier, LoginState>(
+  (ref) => LoginNotifier(ref),
+);
+```
+
+### Screen
+```dart
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends BaseStatefulWidget<LoginScreen> {
+  @override
+  Widget buildView(BuildContext context) {
+    final state = ref.watch(loginProvider);
+    
+    return ContentStateWidget(
+      state: state,
+      child: Scaffold(
+        body: Column(
+          children: [
+            LoginForm(),
+            LoginButton(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+description:
+globs:
+alwaysApply: false
+---
