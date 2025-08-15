@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../base/base_stateful_widget.dart';
 import '../../../base/content_state/content_state_widget.dart';
 import '../provider/location_notifier.dart';
@@ -59,7 +60,7 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
           ),
         );
 
-        _showSnackBar('Centrado en tu ubicación', const Color(0xFF3B82F6));
+        _showSnackBar('maps.center_location'.tr(), const Color(0xFF3B82F6));
       } catch (e) {
         print('Error al centrar mapa: $e');
       }
@@ -73,8 +74,8 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
 
     _showSnackBar(
       _autoCenter
-          ? 'Centrado automático activado'
-          : 'Centrado automático desactivado',
+          ? 'maps.auto_center_enabled'.tr()
+          : 'maps.auto_center_disabled'.tr(),
       _autoCenter ? const Color(0xFF10B981) : const Color(0xFF6B7280),
     );
   }
@@ -188,9 +189,12 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
           position: LatLng(position.latitude, position.longitude),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
           infoWindow: InfoWindow(
-            title: 'Tu ubicación',
+            title: 'maps.your_location'.tr(),
             snippet:
-                'Lat: ${position.latitude.toStringAsFixed(6)}\nLng: ${position.longitude.toStringAsFixed(6)}',
+                'maps.latitude'.tr() +
+                ': ${position.latitude.toStringAsFixed(6)}\n' +
+                'maps.longitude'.tr() +
+                ': ${position.longitude.toStringAsFixed(6)}',
           ),
         ),
       },
@@ -206,15 +210,18 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
           colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6)],
         ),
       ),
-      child: const Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(color: Colors.white, strokeWidth: 3),
-            SizedBox(height: 20),
+            const CircularProgressIndicator(
+              color: Colors.white,
+              strokeWidth: 3,
+            ),
+            const SizedBox(height: 20),
             Text(
-              'Cargando mapa...',
-              style: TextStyle(
+              'maps.loading_map'.tr(),
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.w500,

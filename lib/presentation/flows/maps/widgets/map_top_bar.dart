@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MapTopBar extends StatelessWidget {
   final bool isTracking;
@@ -50,16 +51,18 @@ class MapTopBar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'Mi Ubicación',
-                      style: TextStyle(
+                    Text(
+                      'maps.my_location'.tr(),
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF1F2937),
                       ),
                     ),
                     Text(
-                      isTracking ? 'Siguiendo ubicación' : 'Ubicación detenida',
+                      isTracking
+                          ? 'maps.location_tracking'.tr()
+                          : 'maps.location_stopped'.tr(),
                       style: TextStyle(
                         fontSize: 12,
                         color: isTracking
@@ -101,7 +104,9 @@ class MapTopBar extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      isTracking ? 'ON' : 'OFF',
+                      isTracking
+                          ? 'maps.tracking.active'.tr()
+                          : 'maps.tracking.inactive'.tr(),
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w600,

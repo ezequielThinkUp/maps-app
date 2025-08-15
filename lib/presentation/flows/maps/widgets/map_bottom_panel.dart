@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'coordinate_item.dart';
 import 'control_button.dart';
 
@@ -93,9 +94,9 @@ class MapBottomPanel extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
-                'Coordenadas actuales',
-                style: TextStyle(
+              Text(
+                'maps.current_coordinates'.tr(),
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1F2937),
@@ -108,7 +109,7 @@ class MapBottomPanel extends StatelessWidget {
             children: [
               Expanded(
                 child: CoordinateItem(
-                  label: 'Latitud',
+                  label: 'maps.latitude'.tr(),
                   value: position!.latitude.toStringAsFixed(6),
                   icon: Icons.north,
                 ),
@@ -116,7 +117,7 @@ class MapBottomPanel extends StatelessWidget {
               const SizedBox(width: 15),
               Expanded(
                 child: CoordinateItem(
-                  label: 'Longitud',
+                  label: 'maps.longitude'.tr(),
                   value: position!.longitude.toStringAsFixed(6),
                   icon: Icons.east,
                 ),
@@ -138,7 +139,9 @@ class MapBottomPanel extends StatelessWidget {
             icon: isTracking
                 ? Icons.location_disabled
                 : Icons.location_searching,
-            label: isTracking ? 'Detener' : 'Seguir',
+            label: isTracking
+                ? 'maps.tracking.stop'.tr()
+                : 'maps.tracking.start'.tr(),
             color: isTracking
                 ? const Color(0xFFEF4444)
                 : const Color(0xFF10B981),
@@ -150,7 +153,7 @@ class MapBottomPanel extends StatelessWidget {
           child: ControlButton(
             onPressed: isMapReady ? onCenterMap : null,
             icon: Icons.my_location,
-            label: 'Centrar',
+            label: 'maps.controls.center'.tr(),
             color: const Color(0xFF3B82F6),
           ),
         ),
@@ -192,7 +195,7 @@ class MapBottomPanel extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'Centrado automático',
+                'maps.auto_center'.tr(),
                 style: TextStyle(
                   color: autoCenter ? Colors.white : const Color(0xFF6B7280),
                   fontSize: 14,

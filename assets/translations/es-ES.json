@@ -1,0 +1,63 @@
+{
+    "common": {
+        "loading": "Cargando...",
+        "error": "Error",
+        "success": "Éxito",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "back": "Atrás",
+        "next": "Siguiente",
+        "done": "Listo"
+    },
+    "gps": {
+        "title": "Acceso GPS",
+        "enable_message": "Debe habilitar el GPS para usar la aplicación",
+        "request_access": "Solicitar acceso",
+        "permission_granted": "Permiso concedido",
+        "permission_denied": "Permiso denegado",
+        "gps_disabled": "GPS deshabilitado",
+        "gps_enabled": "GPS habilitado"
+    },
+    "maps": {
+        "title": "Mapa",
+        "my_location": "Mi Ubicación",
+        "location_tracking": "Siguiendo ubicación",
+        "location_stopped": "Ubicación detenida",
+        "current_coordinates": "Coordenadas actuales",
+        "latitude": "Latitud",
+        "longitude": "Longitud",
+        "your_location": "Tu ubicación",
+        "center_location": "Centrado en tu ubicación",
+        "auto_center": "Centrado automático",
+        "auto_center_enabled": "Centrado automático activado",
+        "auto_center_disabled": "Centrado automático desactivado",
+        "loading_map": "Cargando mapa...",
+        "tracking": {
+            "start": "Seguir",
+            "stop": "Detener",
+            "active": "ON",
+            "inactive": "OFF"
+        },
+        "controls": {
+            "center": "Centrar",
+            "zoom_in": "Acercar",
+            "zoom_out": "Alejar"
+        }
+    },
+    "errors": {
+        "network": "Error de conexión",
+        "server": "Error del servidor",
+        "unknown": "Error desconocido",
+        "permission": "Permiso denegado",
+        "location": {
+            "disabled": "Ubicación deshabilitada",
+            "denied": "Permiso de ubicación denegado",
+            "unavailable": "Ubicación no disponible"
+        },
+        "map": {
+            "center_error": "Error al centrar mapa"
+        }
+    }
+}

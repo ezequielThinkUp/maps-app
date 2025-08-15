@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class GpsRequestButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -16,9 +17,9 @@ class GpsRequestButton extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         elevation: 2,
       ),
-      child: const Text(
-        'Solicitar acceso',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      child: Text(
+        'gps.request_access'.tr(),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
       ),
     );
   }
