@@ -1,0 +1,386 @@
+# 🌐 Regla – Internacionalización y Traducciones
+
+Esta regla establece las pautas para el manejo de traducciones e internacionalización en el proyecto, asegurando que todos los textos estén centralizados y sean fácilmente mantenibles.
+
+---
+
+## ✅ Estructura de Archivos
+
+### 📁 Ubicación de Traducciones
+```
+assets/
+└── translations/
+    ├── en-EN.json
+    └── es-ES.json
+```
+
+### 📝 Estructura JSON Jerárquica
+Los archivos de traducción deben seguir una estructura jerárquica organizada por features y contextos:
+
+```json
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Listo"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "subtitle": "Bienvenido de vuelta",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "forgot_password": "¿Olvidaste tu contraseña?",
+      "login_button": "Iniciar Sesión",
+      "no_account": "¿No tienes cuenta?",
+      "sign_up": "Regístrate",
+      "errors": {
+        "invalid_email": "Correo electrónico inválido",
+        "invalid_password": "Contraseña inválida",
+        "user_not_found": "Usuario no encontrado"
+      }
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "subtitle": "Únete a nuestra comunidad",
+      "name": "Nombre completo",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "confirm_password": "Confirmar Contraseña",
+      "register_button": "Crear Cuenta",
+      "has_account": "¿Ya tienes cuenta?",
+      "sign_in": "Inicia Sesión"
+    }
+  },
+  "home": {
+    "title": "Inicio",
+    "welcome": "Bienvenido",
+    "search": "Buscar",
+    "favorites": "Favoritos",
+    "recent": "Reciente"
+  },
+  "maps": {
+    "title": "Mapa",
+    "location": "Ubicación",
+    "search_place": "Buscar lugar",
+    "directions": "Direcciones",
+    "my_location": "Mi ubicación",
+    "center_map": "Centrar mapa",
+    "tracking": {
+      "start": "Iniciar seguimiento",
+      "stop": "Detener seguimiento",
+      "active": "Seguimiento activo",
+      "inactive": "Seguimiento inactivo"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "language": "Idioma",
+    "theme": "Tema",
+    "notifications": "Notificaciones",
+    "privacy": "Privacidad",
+    "about": "Acerca de",
+    "logout": "Cerrar Sesión"
+  },
+  "errors": {
+    "network": "Error de conexión",
+    "server": "Error del servidor",
+    "unknown": "Error desconocido",
+    "permission": "Permiso denegado",
+    "location": {
+      "disabled": "Ubicación deshabilitada",
+      "denied": "Permiso de ubicación denegado",
+      "unavailable": "Ubicación no disponible"
+    }
+  }
+}
+```
+
+---
+
+## ✅ Uso de Traducciones
+
+### 🔑 Acceso a Traducciones
+Usar siempre el método `.tr()` para acceder a las traducciones:
+
+```dart
+// ✅ Correcto
+Text('auth.login.title'.tr())
+
+// ❌ Incorrecto
+Text('Iniciar Sesión')
+```
+
+### 📝 Ejemplos de Uso
+
+#### En Widgets
+```dart
+class LoginScreen extends BaseStatefulWidget<LoginScreen> {
+  @override
+  Widget buildView(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('auth.login.title'.tr()),
+      ),
+      body: Column(
+        children: [
+          Text('auth.login.subtitle'.tr()),
+          CustomTextField(
+            label: 'auth.login.email'.tr(),
+            hint: 'auth.login.email'.tr(),
+          ),
+          CustomTextField(
+            label: 'auth.login.password'.tr(),
+            obscureText: true,
+          ),
+          PrimaryButton(
+            label: 'auth.login.login_button'.tr(),
+            onPressed: _handleLogin,
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+#### En Notifiers
+```dart
+class LoginNotifier extends BaseStateNotifier<LoginState, LoginAction> {
+  @override
+  void reducer({required LoginAction action}) {
+    switch (action) {
+      case LoginErrorAction():
+        // Usar traducciones para mensajes de error
+        final errorMessage = 'auth.login.errors.invalid_email'.tr();
+        state = state.copyWith(error: errorMessage);
+        break;
+    }
+  }
+}
+```
+
+#### En SnackBars y Alertas
+```dart
+ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text('common.success'.tr()),
+    backgroundColor: Colors.green,
+  ),
+);
+
+// Para errores
+showDialog(
+  context: context,
+  builder: (context) => AlertDialog(
+    title: Text('common.error'.tr()),
+    content: Text('errors.network'.tr()),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: Text('common.cancel'.tr()),
+      ),
+    ],
+  ),
+);
+```
+
+---
+
+## ✅ Configuración de GetX
+
+### 📦 Dependencias
+Asegurarse de que `get` esté en `pubspec.yaml`:
+
+```yaml
+dependencies:
+  get: ^4.6.5
+```
+
+### 🔧 Configuración en main.dart
+```dart
+import 'package:get/get.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      title: 'Maps App',
+      translations: AppTranslations(),
+      locale: const Locale('es', 'ES'), // Idioma por defecto
+      fallbackLocale: const Locale('en', 'EN'), // Idioma de respaldo
+      home: const SplashScreen(),
+    );
+  }
+}
+```
+
+### 📝 Clase de Traducciones
+```dart
+class AppTranslations extends Translations {
+  @override
+  Map<String, Map<String, String>> get keys => {
+        'en-EN': {
+          // Traducciones en inglés
+          'auth.login.title': 'Login',
+          'auth.login.subtitle': 'Welcome back',
+          // ... más traducciones
+        },
+        'es-ES': {
+          // Traducciones en español
+          'auth.login.title': 'Iniciar Sesión',
+          'auth.login.subtitle': 'Bienvenido de vuelta',
+          // ... más traducciones
+        },
+      };
+}
+```
+
+---
+
+## ✅ Buenas Prácticas
+
+### 🏷️ Nomenclatura de Claves
+- Usar **nombres descriptivos** y **jerárquicos**
+- **Separar por puntos** para crear jerarquías
+- **Usar snake_case** para las claves
+- **Agrupar por feature** (auth, home, maps, etc.)
+
+```dart
+// ✅ Bueno - Jerárquico y descriptivo
+'auth.login.title'
+'auth.login.errors.invalid_email'
+'maps.tracking.start'
+
+// ❌ Malo - Plano y poco descriptivo
+'login_title'
+'error_message'
+'button_text'
+```
+
+### 🔄 Manejo de Plurales
+Para textos que cambian según el número:
+
+```json
+{
+  "items": {
+    "count": {
+      "zero": "No hay elementos",
+      "one": "1 elemento",
+      "other": "{{count}} elementos"
+    }
+  }
+}
+```
+
+```dart
+// En el código
+Text('items.count'.trParams({'count': itemCount.toString()}))
+```
+
+### 🎯 Contextos Específicos
+Usar claves específicas para diferentes contextos:
+
+```json
+{
+  "buttons": {
+    "save": "Guardar",
+    "save_changes": "Guardar Cambios",
+    "save_draft": "Guardar Borrador"
+  }
+}
+```
+
+---
+
+## ⚠️ Evitar
+
+❌ **Strings literales** en widgets
+```dart
+// ❌ Malo
+Text('Iniciar Sesión')
+Text('Error de conexión')
+
+// ✅ Bueno
+Text('auth.login.title'.tr())
+Text('errors.network'.tr())
+```
+
+❌ **Concatenación de strings** con traducciones
+```dart
+// ❌ Malo
+Text('Bienvenido ' + userName + '!')
+
+// ✅ Bueno
+Text('home.welcome_user'.trParams({'name': userName}))
+```
+
+❌ **Traducciones hardcodeadas** en lógica de negocio
+```dart
+// ❌ Malo
+throw Exception('Usuario no encontrado');
+
+// ✅ Bueno
+throw Exception('auth.login.errors.user_not_found'.tr());
+```
+
+---
+
+## 📋 Checklist para Traducciones
+
+- [ ] Todos los textos usan `.tr()`
+- [ ] Estructura jerárquica en archivos JSON
+- [ ] Claves descriptivas y organizadas
+- [ ] Traducciones completas en ambos idiomas
+- [ ] Manejo de plurales cuando sea necesario
+- [ ] Sin strings literales en widgets
+- [ ] Configuración correcta de GetX
+- [ ] Fallback locale configurado
+
+---
+
+## 🔧 Herramientas Útiles
+
+### 📊 Validador de Traducciones
+Crear un script para validar que todas las claves estén presentes en ambos idiomas:
+
+```dart
+void validateTranslations() {
+  final enKeys = getEnglishKeys();
+  final esKeys = getSpanishKeys();
+  
+  final missingInEs = enKeys.difference(esKeys);
+  final missingInEn = esKeys.difference(enKeys);
+  
+  if (missingInEs.isNotEmpty) {
+    print('Missing in Spanish: $missingInEs');
+  }
+  
+  if (missingInEn.isNotEmpty) {
+    print('Missing in English: $missingInEn');
+  }
+}
+```
+
+### 🌍 Cambio de Idioma
+```dart
+void changeLanguage(String languageCode, String countryCode) {
+  final locale = Locale(languageCode, countryCode);
+  Get.updateLocale(locale);
+}
+```
+description:
+globs:
+alwaysApply: false
+---

@@ -1,0 +1,492 @@
+# 🔧 Regla – Consistencia de Código
+
+Esta regla establece las pautas para mantener consistencia en el código, incluyendo imports relativos, archivos barril, organización de archivos y buenas prácticas generales.
+
+---
+
+## ✅ Imports Relativos
+
+### 📝 Uso de Imports Relativos
+Usar siempre **imports relativos** (`../`, `./`) en lugar de imports de paquete (`package:...`) para archivos dentro del proyecto.
+
+```dart
+// ✅ Correcto - Imports relativos
+import '../widgets/custom_button.dart';
+import '../../config/theme/color_schema.dart';
+import './login_screen.dart';
+import '../providers/auth_provider.dart';
+
+// ❌ Incorrecto - Imports de paquete para archivos internos
+import 'package:maps_app/widgets/custom_button.dart';
+import 'package:maps_app/config/theme/color_schema.dart';
+import 'package:maps_app/screens/login_screen.dart';
+```
+
+### 🎯 Excepciones
+Los imports de paquete solo se usan para:
+- **Dependencias externas** (Flutter, Riverpod, etc.)
+- **Paquetes de terceros**
+
+```dart
+// ✅ Correcto - Dependencias externas
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// ✅ Correcto - Paquetes de terceros
+import 'package:equatable/equatable.dart';
+import 'package:geolocator/geolocator.dart';
+```
+
+---
+
+## 📦 Archivos Barril
+
+### 🎯 Propósito
+Los archivos barril (barrel files) organizan y simplifican los exports de un módulo o feature.
+
+### 📁 Estructura de Archivos Barril
+
+#### **Archivo Barril de Feature**
+```dart
+// lib/presentation/flows/auth/auth.dart
+export 'login/login_screen.dart';
+export 'login/login_notifier.dart';
+export 'login/login_provider.dart';
+export 'login/login_state.dart';
+export 'login/login_action.dart';
+export 'register/register_screen.dart';
+export 'register/register_notifier.dart';
+export 'register/register_provider.dart';
+export 'register/register_state.dart';
+export 'register/register_action.dart';
+```
+
+#### **Archivo Barril de Widgets**
+```dart
+// lib/presentation/shared/widgets/widgets.dart
+export 'buttons/primary_button.dart';
+export 'buttons/secondary_button.dart';
+export 'buttons/buttons.dart';
+export 'inputs/text_input.dart';
+export 'inputs/password_input.dart';
+export 'inputs/inputs.dart';
+export 'cards/info_card.dart';
+export 'cards/action_card.dart';
+export 'cards/cards.dart';
+export 'loading/loading_spinner.dart';
+export 'loading/skeleton_loader.dart';
+export 'loading/loading.dart';
+```
+
+#### **Archivo Barril de Configuración**
+```dart
+// lib/config/config.dart
+export 'theme/theme.dart';
+export 'maps_config.dart';
+export 'app_constants.dart';
+```
+
+#### **Archivo Barril de Providers**
+```dart
+// lib/providers/providers.dart
+export 'base/base_provider.dart';
+export 'base/base_state_notifier.dart';
+export 'gps/gps_notifier.dart';
+export 'gps/gps_provider.dart';
+export 'location/location_notifier.dart';
+export 'location/location_provider.dart';
+```
+
+### 📝 Convenciones de Nomenclatura
+- **Archivo barril principal:** `{feature}.dart`
+- **Archivo barril de widgets:** `widgets.dart`
+- **Archivo barril de providers:** `providers.dart`
+- **Archivo barril de config:** `config.dart`
+
+---
+
+## 📁 Organización de Archivos
+
+### 🏗️ Estructura Recomendada
+```
+lib/
+├── config/
+│   ├── config.dart              # Archivo barril
+│   ├── app_constants.dart
+│   ├── maps_config.dart
+│   └── theme/
+│       ├── theme.dart           # Archivo barril
+│       ├── color_schema.dart
+│       ├── text_theme.dart
+│       ├── app_images.dart
+│       └── app_theme.dart
+├── presentation/
+│   ├── presentation.dart        # Archivo barril
+│   ├── base/
+│   │   ├── base.dart           # Archivo barril
+│   │   ├── base_hook_widget.dart
+│   │   ├── base_stateful_widget.dart
+│   │   └── content_state_widget.dart
+│   ├── shared/
+│   │   ├── shared.dart         # Archivo barril
+│   │   └── widgets/
+│   │       ├── widgets.dart    # Archivo barril
+│   │       ├── buttons/
+│   │       ├── inputs/
+│   │       ├── cards/
+│   │       └── loading/
+│   └── flows/
+│       ├── flows.dart          # Archivo barril
+│       ├── auth/
+│       │   ├── auth.dart       # Archivo barril
+│       │   ├── login/
+│       │   └── register/
+│       ├── home/
+│       │   ├── home.dart       # Archivo barril
+│       │   └── widgets/
+│       └── maps/
+│           ├── maps.dart       # Archivo barril
+│           └── widgets/
+├── providers/
+│   ├── providers.dart          # Archivo barril
+│   ├── base/
+│   │   ├── base.dart           # Archivo barril
+│   │   ├── base_provider.dart
+│   │   └── base_state_notifier.dart
+│   ├── gps/
+│   │   ├── gps.dart           # Archivo barril
+│   │   ├── gps_notifier.dart
+│   │   ├── gps_provider.dart
+│   │   ├── gps_state.dart
+│   │   └── gps_action.dart
+│   └── location/
+│       ├── location.dart       # Archivo barril
+│       ├── location_notifier.dart
+│       ├── location_provider.dart
+│       ├── location_state.dart
+│       └── location_action.dart
+└── main.dart
+```
+
+---
+
+## 🔧 Separación de Widgets
+
+### 📝 Principio de Responsabilidad Única
+Separar widgets pequeños en archivos propios para mayor legibilidad y mantenibilidad.
+
+### ✅ Ejemplo de Separación
+
+#### **Antes - Widget Monolítico**
+```dart
+// ❌ Malo - Todo en un archivo
+class LoginScreen extends BaseStatefulWidget<LoginScreen> {
+  @override
+  Widget buildView(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          // 100+ líneas de código aquí
+          _buildHeader(),
+          _buildForm(),
+          _buildButtons(),
+          _buildFooter(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    // 30+ líneas
+  }
+
+  Widget _buildForm() {
+    // 50+ líneas
+  }
+
+  Widget _buildButtons() {
+    // 20+ líneas
+  }
+
+  Widget _buildFooter() {
+    // 15+ líneas
+  }
+}
+```
+
+#### **Después - Widgets Separados**
+```dart
+// ✅ Bueno - Widgets separados
+// login_screen.dart
+class LoginScreen extends BaseStatefulWidget<LoginScreen> {
+  @override
+  Widget buildView(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          LoginHeader(),
+          LoginForm(),
+          LoginButtons(),
+          LoginFooter(),
+        ],
+      ),
+    );
+  }
+}
+
+// widgets/login_header.dart
+class LoginHeader extends BaseHookWidget {
+  @override
+  Widget buildView(BuildContext context, WidgetRef ref) {
+    return Container(
+      // Implementación del header
+    );
+  }
+}
+
+// widgets/login_form.dart
+class LoginForm extends BaseHookWidget {
+  @override
+  Widget buildView(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        EmailInput(),
+        PasswordInput(),
+        ForgotPasswordLink(),
+      ],
+    );
+  }
+}
+
+// widgets.dart
+export 'login_header.dart';
+export 'login_form.dart';
+export 'login_buttons.dart';
+export 'login_footer.dart';
+```
+
+---
+
+## 📝 Convenciones de Nomenclatura
+
+### 🏷️ Archivos
+- **snake_case** para nombres de archivos
+- **Descriptivos** y **específicos**
+- **Sufijos** según el tipo de archivo
+
+```dart
+// ✅ Correcto
+login_screen.dart
+login_notifier.dart
+login_provider.dart
+login_state.dart
+login_action.dart
+primary_button.dart
+text_input.dart
+color_schema.dart
+app_theme.dart
+
+// ❌ Incorrecto
+LoginScreen.dart
+loginNotifier.dart
+loginProvider.dart
+PrimaryButton.dart
+ColorSchema.dart
+```
+
+### 🏷️ Clases
+- **PascalCase** para nombres de clases
+- **Sufijos** descriptivos según el tipo
+
+```dart
+// ✅ Correcto
+class LoginScreen extends BaseStatefulWidget<LoginScreen>
+class LoginNotifier extends BaseStateNotifier<LoginState, LoginAction>
+class LoginProvider extends BaseProvider<LoginNotifier, LoginState>
+class LoginState extends Equatable
+class LoginAction
+class PrimaryButton extends BaseHookWidget
+class CustomTextField extends BaseHookWidget
+
+// ❌ Incorrecto
+class loginScreen
+class Login
+class Button
+class TextField
+```
+
+### 🏷️ Variables y Métodos
+- **camelCase** para variables y métodos
+- **Descriptivos** y **específicos**
+
+```dart
+// ✅ Correcto
+final String email;
+final bool isLoading;
+final VoidCallback onPressed;
+
+void _handleLogin() { }
+void _validateEmail() { }
+void _showErrorDialog() { }
+
+// ❌ Incorrecto
+final String e;
+final bool loading;
+final VoidCallback onTap;
+
+void login() { }
+void validate() { }
+void showDialog() { }
+```
+
+---
+
+## 🔄 Orden de Imports
+
+### 📋 Orden Recomendado
+1. **Imports de Flutter/Dart**
+2. **Imports de paquetes externos**
+3. **Imports relativos del proyecto**
+4. **Imports del mismo archivo**
+
+```dart
+// 1. Flutter/Dart
+import 'dart:async';
+import 'dart:io';
+
+// 2. Paquetes externos
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
+import 'package:equatable/equatable.dart';
+
+// 3. Imports relativos del proyecto
+import '../widgets/custom_button.dart';
+import '../../config/theme/color_schema.dart';
+import '../providers/auth_provider.dart';
+
+// 4. Imports del mismo archivo (si aplica)
+import './login_state.dart';
+import './login_action.dart';
+```
+
+---
+
+## 📋 Checklist de Consistencia
+
+### 🔧 Imports
+- [ ] Usar imports relativos para archivos internos
+- [ ] Usar imports de paquete solo para dependencias externas
+- [ ] Ordenar imports correctamente
+- [ ] Evitar imports innecesarios
+
+### 📦 Archivos Barril
+- [ ] Crear archivo barril para cada feature
+- [ ] Exportar todos los archivos relevantes
+- [ ] Usar nomenclatura consistente
+- [ ] Mantener archivos barril actualizados
+
+### 📁 Organización
+- [ ] Separar widgets pequeños en archivos propios
+- [ ] Seguir estructura de carpetas recomendada
+- [ ] Usar nomenclatura snake_case para archivos
+- [ ] Usar nomenclatura PascalCase para clases
+
+### 🏷️ Nomenclatura
+- [ ] Nombres descriptivos y específicos
+- [ ] Sufijos apropiados según el tipo
+- [ ] Consistencia en todo el proyecto
+- [ ] Evitar abreviaciones confusas
+
+---
+
+## ⚠️ Evitar
+
+❌ **Imports de paquete para archivos internos**
+```dart
+// ❌ Malo
+import 'package:maps_app/widgets/button.dart';
+
+// ✅ Bueno
+import '../widgets/button.dart';
+```
+
+❌ **Archivos monolíticos**
+```dart
+// ❌ Malo - 500+ líneas en un archivo
+class HugeWidget extends StatelessWidget {
+  // Todo el código aquí
+}
+
+// ✅ Bueno - Separar en múltiples archivos
+class MainWidget extends StatelessWidget {
+  // Solo la composición
+}
+```
+
+❌ **Nomenclatura inconsistente**
+```dart
+// ❌ Malo
+class loginScreen
+class LoginWidget
+class button
+
+// ✅ Bueno
+class LoginScreen
+class LoginWidget
+class Button
+```
+
+❌ **Imports desordenados**
+```dart
+// ❌ Malo
+import '../widgets/button.dart';
+import 'package:flutter/material.dart';
+import './state.dart';
+import 'package:riverpod/riverpod.dart';
+
+// ✅ Bueno
+import 'package:flutter/material.dart';
+import 'package:riverpod/riverpod.dart';
+import '../widgets/button.dart';
+import './state.dart';
+```
+
+---
+
+## 🛠️ Herramientas Útiles
+
+### 📊 Analizador de Imports
+Crear un script para validar imports:
+
+```dart
+void validateImports(String filePath) {
+  final content = File(filePath).readAsStringSync();
+  final lines = content.split('\n');
+  
+  for (final line in lines) {
+    if (line.trim().startsWith('import')) {
+      if (line.contains('package:maps_app/')) {
+        print('❌ Package import found in $filePath: $line');
+      }
+    }
+  }
+}
+```
+
+### 🔍 Linter Rules
+Configurar reglas en `analysis_options.yaml`:
+
+```yaml
+analyzer:
+  rules:
+    - prefer_relative_imports
+    - directives_ordering
+    - sort_pub_dependencies
+```
+description:
+globs:
+alwaysApply: false
+---
