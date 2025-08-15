@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:maps_app/providers/gps/gps_notifier.dart';
-import 'package:maps_app/providers/gps/gps_action.dart';
-import 'package:maps_app/screens/map_screen.dart';
+import '../../../base/base_stateful_widget.dart';
+import '../../../base/content_state/content_state_widget.dart';
+import '../provider/gps_notifier.dart';
+import '../provider/gps_action.dart';
+import '../provider/gps_state.dart';
+import '../../maps/ui/map_screen.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 
-class GpsAccessScreen extends ConsumerWidget {
+class GpsAccessScreen extends ConsumerStatefulWidget {
   const GpsAccessScreen({super.key});
 
   static const String routeName = 'gps_access';
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GpsAccessScreen> createState() => _GpsAccessScreenState();
+}
+
+class _GpsAccessScreenState extends BaseStatefulWidget<GpsAccessScreen> {
+  @override
+  Widget buildView(BuildContext context) {
     final gpsState = ref.watch(gpsProvider);
 
-    ref.listen(gpsProvider, (prev, next) {
+    ref.listen<GpsState>(gpsProvider, (prev, next) {
       if (prev?.isPermissionGranted != next.isPermissionGranted &&
           next.isPermissionGranted) {
         Future.microtask(() async {
@@ -32,12 +40,16 @@ class GpsAccessScreen extends ConsumerWidget {
         });
       }
     });
-    return Scaffold(
-      appBar: AppBar(title: const Text('GPS Access')),
-      body: Center(
-        child: gpsState.isGpsEnabled
-            ? _requestAccessButton(ref)
-            : _enableGpsMessage(),
+
+    return ContentStateWidget(
+      state: gpsState,
+      child: Scaffold(
+        appBar: AppBar(title: const Text('GPS Access')),
+        body: Center(
+          child: gpsState.isGpsEnabled
+              ? _requestAccessButton()
+              : _enableGpsMessage(),
+        ),
       ),
     );
   }
@@ -49,7 +61,7 @@ class GpsAccessScreen extends ConsumerWidget {
     );
   }
 
-  Widget _requestAccessButton(WidgetRef ref) {
+  Widget _requestAccessButton() {
     return ElevatedButton(
       onPressed: () {
         ref.read(gpsProvider.notifier).reducer(action: RequestAccessAction());

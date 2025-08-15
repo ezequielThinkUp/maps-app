@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:maps_app/providers/content_state.dart';
+import 'content_state/content_state_provider.dart';
 
 abstract class BaseStateNotifier<S, A> extends StateNotifier<S> {
   BaseStateNotifier({required S state, required this.ref}) : super(state);

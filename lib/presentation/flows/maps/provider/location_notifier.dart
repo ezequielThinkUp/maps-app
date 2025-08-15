@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart' as geo;
-import 'package:maps_app/providers/base/base_provider.dart';
-import 'package:maps_app/providers/base/base_state_notifier.dart';
-import 'package:maps_app/providers/location/location_action.dart';
-import 'package:maps_app/providers/location/location_state.dart';
+import '../../../base/base_provider.dart';
+import '../../../base/base_state_notifier.dart';
+import 'location_action.dart';
+import 'location_state.dart';
 
 class LocationNotifier
     extends BaseStateNotifier<LocationState, LocationAction> {
