@@ -5,6 +5,7 @@ import '../../../base/content_state/content_state_widget.dart';
 import '../provider/gps_notifier.dart';
 import '../provider/gps_action.dart';
 import '../provider/gps_state.dart';
+import '../widgets/widgets.dart';
 import '../../maps/ui/map_screen.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 
@@ -22,55 +23,46 @@ class _GpsAccessScreenState extends BaseStatefulWidget<GpsAccessScreen> {
   Widget buildView(BuildContext context) {
     final gpsState = ref.watch(gpsProvider);
 
-    ref.listen<GpsState>(gpsProvider, (prev, next) {
-      if (prev?.isPermissionGranted != next.isPermissionGranted &&
-          next.isPermissionGranted) {
-        Future.microtask(() async {
-          try {
-            final accuracy = await geo.Geolocator.getLocationAccuracy();
-            if (accuracy == geo.LocationAccuracyStatus.reduced) {
-              await geo.Geolocator.requestTemporaryFullAccuracy(
-                purposeKey: 'PreciseLocation',
-              );
-            }
-          } catch (_) {}
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const MapScreen()),
-          );
-        });
-      }
-    });
+    _setupNavigationListener();
 
     return ContentStateWidget(
       state: gpsState,
       child: Scaffold(
         appBar: AppBar(title: const Text('GPS Access')),
-        body: Center(
-          child: gpsState.isGpsEnabled
-              ? _requestAccessButton()
-              : _enableGpsMessage(),
+        body: GpsContent(
+          isGpsEnabled: gpsState.isGpsEnabled,
+          onRequestAccess: _requestAccess,
         ),
       ),
     );
   }
 
-  Widget _enableGpsMessage() {
-    return const Text(
-      'Debe habilitar el GPS para usar la aplicación',
-      textAlign: TextAlign.center,
-    );
+  void _setupNavigationListener() {
+    ref.listen<GpsState>(gpsProvider, (prev, next) {
+      if (prev?.isPermissionGranted != next.isPermissionGranted &&
+          next.isPermissionGranted) {
+        _navigateToMap();
+      }
+    });
   }
 
-  Widget _requestAccessButton() {
-    return ElevatedButton(
-      onPressed: () {
-        ref.read(gpsProvider.notifier).reducer(action: RequestAccessAction());
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
-      ),
-      child: const Text('Solicitar acceso'),
-    );
+  void _requestAccess() {
+    ref.read(gpsProvider.notifier).reducer(action: RequestAccessAction());
+  }
+
+  Future<void> _navigateToMap() async {
+    Future.microtask(() async {
+      try {
+        final accuracy = await geo.Geolocator.getLocationAccuracy();
+        if (accuracy == geo.LocationAccuracyStatus.reduced) {
+          await geo.Geolocator.requestTemporaryFullAccuracy(
+            purposeKey: 'PreciseLocation',
+          );
+        }
+      } catch (_) {}
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (_) => const MapScreen()));
+    });
   }
 }
