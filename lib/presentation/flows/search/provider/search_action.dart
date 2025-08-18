@@ -1,4 +1,5 @@
 import '../../../../models/models.dart';
+import 'search_state.dart';
 
 abstract class SearchAction {}
 
@@ -30,3 +31,53 @@ class SelectResultAction extends SearchAction {
 class ClearSearchAction extends SearchAction {}
 
 class ClearResultsAction extends SearchAction {}
+
+class AddToHistoryAction extends SearchAction {
+  final String query;
+  AddToHistoryAction(this.query);
+}
+
+class RemoveFromHistoryAction extends SearchAction {
+  final String query;
+  RemoveFromHistoryAction(this.query);
+}
+
+class ClearHistoryAction extends SearchAction {}
+
+class AddToRecentSearchesAction extends SearchAction {
+  final SearchResult result;
+  AddToRecentSearchesAction(this.result);
+}
+
+class RemoveFromRecentSearchesAction extends SearchAction {
+  final SearchResult result;
+  RemoveFromRecentSearchesAction(this.result);
+}
+
+class ClearRecentSearchesAction extends SearchAction {}
+
+class AddToFavoritesAction extends SearchAction {
+  final SearchResult result;
+  AddToFavoritesAction(this.result);
+}
+
+class RemoveFromFavoritesAction extends SearchAction {
+  final SearchResult result;
+  RemoveFromFavoritesAction(this.result);
+}
+
+class ClearFavoritesAction extends SearchAction {}
+
+class UpdateFiltersAction extends SearchAction {
+  final SearchFilters filters;
+  UpdateFiltersAction(this.filters);
+}
+
+class ResetFiltersAction extends SearchAction {}
+
+class SetErrorMessageAction extends SearchAction {
+  final String? errorMessage;
+  SetErrorMessageAction(this.errorMessage);
+}
+
+class ClearErrorMessageAction extends SearchAction {}
