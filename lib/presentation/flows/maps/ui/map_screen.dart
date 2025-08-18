@@ -62,7 +62,7 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
 
         _showSnackBar('maps.center_location'.tr(), const Color(0xFF3B82F6));
       } catch (e) {
-        print('Error al centrar mapa: $e');
+        debugPrint('Error al centrar mapa: $e');
       }
     }
   }
@@ -191,10 +191,8 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
           infoWindow: InfoWindow(
             title: 'maps.your_location'.tr(),
             snippet:
-                'maps.latitude'.tr() +
-                ': ${position.latitude.toStringAsFixed(6)}\n' +
-                'maps.longitude'.tr() +
-                ': ${position.longitude.toStringAsFixed(6)}',
+                '${'maps.latitude'.tr()}: ${position.latitude.toStringAsFixed(6)}\n'
+                '${'maps.longitude'.tr()}: ${position.longitude.toStringAsFixed(6)}',
           ),
         ),
       },

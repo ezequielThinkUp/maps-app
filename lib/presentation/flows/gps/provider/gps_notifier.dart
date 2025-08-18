@@ -100,6 +100,6 @@ class GpsNotifier extends BaseStateNotifier<GpsState, GpsAction> {
   }
 }
 
-final gpsProvider = BaseProvider<GpsNotifier, GpsState>(
+final gpsProvider = baseProvider<GpsNotifier, GpsState>(
   (ref) => GpsNotifier(ref),
 );

@@ -79,6 +79,6 @@ class LocationNotifier
   }
 }
 
-final locationProvider = BaseProvider<LocationNotifier, LocationState>(
+final locationProvider = baseProvider<LocationNotifier, LocationState>(
   (ref) => LocationNotifier(ref),
 );

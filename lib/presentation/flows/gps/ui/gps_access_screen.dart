@@ -52,18 +52,20 @@ class _GpsAccessScreenState extends BaseStatefulWidget<GpsAccessScreen> {
   }
 
   Future<void> _navigateToMap() async {
-    Future.microtask(() async {
-      try {
-        final accuracy = await geo.Geolocator.getLocationAccuracy();
-        if (accuracy == geo.LocationAccuracyStatus.reduced) {
-          await geo.Geolocator.requestTemporaryFullAccuracy(
-            purposeKey: 'PreciseLocation',
-          );
-        }
-      } catch (_) {}
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => const MapScreen()));
-    });
+    if (!mounted) return;
+
+    try {
+      final accuracy = await geo.Geolocator.getLocationAccuracy();
+      if (accuracy == geo.LocationAccuracyStatus.reduced) {
+        await geo.Geolocator.requestTemporaryFullAccuracy(
+          purposeKey: 'PreciseLocation',
+        );
+      }
+    } catch (_) {}
+
+    if (!mounted) return;
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const MapScreen()));
   }
 }

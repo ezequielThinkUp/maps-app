@@ -19,12 +19,12 @@ class ControlButton extends StatelessWidget {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        color: onPressed != null ? color : color.withOpacity(0.3),
+        color: onPressed != null ? color : color.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(15),
         boxShadow: onPressed != null
             ? [
                 BoxShadow(
-                  color: color.withOpacity(0.3),
+                  color: color.withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),

@@ -28,6 +28,7 @@ class AppColorSchema {
   // Colores de superficie
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(0xFFF8FAFC);
+  static const Color surfaceContainerHighest = Color(0xFFF1F5F9);
   static const Color onSurface = Color(0xFF1F2937);
   static const Color onSurfaceVariant = Color(0xFF6B7280);
 
@@ -63,8 +64,8 @@ class AppColorSchema {
 
   // Colores de transparencia
   static Color primaryWithOpacity(double opacity) =>
-      primary.withOpacity(opacity);
+      primary.withValues(alpha: opacity);
 
   static Color surfaceWithOpacity(double opacity) =>
-      surface.withOpacity(opacity);
+      surface.withValues(alpha: opacity);
 }

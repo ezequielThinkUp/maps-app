@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'base_state_notifier.dart';
 
-StateNotifierProvider<N, S> BaseProvider<
+StateNotifierProvider<N, S> baseProvider<
   N extends BaseStateNotifier<S, dynamic>,
   S
 >(N Function(Ref ref) create) {

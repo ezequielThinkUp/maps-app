@@ -23,7 +23,7 @@ class MapTopBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, 5),
             ),
@@ -80,8 +80,8 @@ class MapTopBar extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isTracking
-                      ? const Color(0xFF10B981).withOpacity(0.1)
-                      : const Color(0xFF6B7280).withOpacity(0.1),
+                      ? const Color(0xFF10B981).withValues(alpha: 0.1)
+                      : const Color(0xFF6B7280).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: isTracking

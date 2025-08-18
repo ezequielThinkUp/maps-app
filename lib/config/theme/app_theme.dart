@@ -26,7 +26,7 @@ class AppTheme {
     cardTheme: CardThemeData(
       color: AppColorSchema.surface,
       elevation: 2,
-      shadowColor: AppColorSchema.shadow.withOpacity(0.1),
+      shadowColor: AppColorSchema.shadow.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
 
@@ -36,7 +36,7 @@ class AppTheme {
         backgroundColor: AppColorSchema.primary,
         foregroundColor: AppColorSchema.onPrimary,
         elevation: 2,
-        shadowColor: AppColorSchema.shadow.withOpacity(0.25),
+        shadowColor: AppColorSchema.shadow.withValues(alpha: 0.25),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         textStyle: AppTextTheme.button,
@@ -56,7 +56,7 @@ class AppTheme {
     // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColorSchema.surfaceVariant,
+      fillColor: AppColorSchema.surfaceContainerHighest,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide.none,
@@ -123,7 +123,7 @@ class AppTheme {
     cardTheme: CardThemeData(
       color: _darkColorScheme.surface,
       elevation: 2,
-      shadowColor: AppColorSchema.shadow.withOpacity(0.1),
+      shadowColor: AppColorSchema.shadow.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
 
@@ -133,7 +133,7 @@ class AppTheme {
         backgroundColor: AppColorSchema.primary,
         foregroundColor: AppColorSchema.onPrimary,
         elevation: 2,
-        shadowColor: AppColorSchema.shadow.withOpacity(0.25),
+        shadowColor: AppColorSchema.shadow.withValues(alpha: 0.25),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         textStyle: AppTextTheme.button,
@@ -153,7 +153,7 @@ class AppTheme {
     // Input Decoration Theme
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: _darkColorScheme.surfaceVariant,
+      fillColor: _darkColorScheme.surfaceContainerHighest,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide.none,
@@ -218,10 +218,8 @@ class AppTheme {
     onErrorContainer: AppColorSchema.onErrorContainer,
     surface: AppColorSchema.surface,
     onSurface: AppColorSchema.onSurface,
-    surfaceVariant: AppColorSchema.surfaceVariant,
+    surfaceContainerHighest: AppColorSchema.surfaceContainerHighest,
     onSurfaceVariant: AppColorSchema.onSurfaceVariant,
-    background: AppColorSchema.background,
-    onBackground: AppColorSchema.onBackground,
     outline: AppColorSchema.outline,
     outlineVariant: AppColorSchema.outlineVariant,
     shadow: AppColorSchema.shadow,
@@ -249,10 +247,8 @@ class AppTheme {
     onErrorContainer: AppColorSchema.onErrorContainer,
     surface: Color(0xFF1F2937), // Adaptado para modo oscuro
     onSurface: Color(0xFFF9FAFB), // Adaptado para modo oscuro
-    surfaceVariant: Color(0xFF374151), // Adaptado para modo oscuro
+    surfaceContainerHighest: Color(0xFF374151), // Adaptado para modo oscuro
     onSurfaceVariant: Color(0xFFD1D5DB), // Adaptado para modo oscuro
-    background: Color(0xFF111827), // Adaptado para modo oscuro
-    onBackground: Color(0xFFF9FAFB), // Adaptado para modo oscuro
     outline: Color(0xFF4B5563), // Adaptado para modo oscuro
     outlineVariant: Color(0xFF6B7280), // Adaptado para modo oscuro
     shadow: AppColorSchema.shadow,
