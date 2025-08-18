@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../base/base_provider.dart';
 import '../../../base/base_state_notifier.dart';
+import '../../../../models/models.dart';
 import 'search_action.dart';
 import 'search_state.dart';
 

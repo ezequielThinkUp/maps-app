@@ -1,4 +1,4 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../../../models/models.dart';
 
 class SearchState {
   final String query;
@@ -47,34 +47,4 @@ class SearchState {
   @override
   String toString() =>
       'SearchState(query: $query, isSearching: $isSearching, results: ${results.length})';
-}
-
-class SearchResult {
-  final String name;
-  final String address;
-  final LatLng location;
-  final String? placeId;
-
-  const SearchResult({
-    required this.name,
-    required this.address,
-    required this.location,
-    this.placeId,
-  });
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is SearchResult &&
-        other.name == name &&
-        other.address == address &&
-        other.location == location;
-  }
-
-  @override
-  int get hashCode => name.hashCode ^ address.hashCode ^ location.hashCode;
-
-  @override
-  String toString() =>
-      'SearchResult(name: $name, address: $address, location: $location)';
 }

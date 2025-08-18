@@ -1,4 +1,4 @@
-import 'search_state.dart';
+import '../../../../models/models.dart';
 
 abstract class SearchAction {}
 

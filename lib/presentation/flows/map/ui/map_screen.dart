@@ -11,6 +11,7 @@ import '../../location/provider/provider.dart';
 import '../../location/widgets/widgets.dart';
 import '../../search/provider/provider.dart';
 import '../../search/widgets/widgets.dart';
+import '../../../../models/models.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
