@@ -15,7 +15,8 @@ class MapFollowUserButton extends StatelessWidget {
     return Positioned(
       right: 20,
       bottom: MediaQuery.of(context).padding.bottom + 220,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
         width: 45,
         height: 45,
         decoration: BoxDecoration(
@@ -40,10 +41,14 @@ class MapFollowUserButton extends StatelessWidget {
           child: InkWell(
             onTap: onToggleFollowUser,
             borderRadius: BorderRadius.circular(12),
-            child: Icon(
-              isFollowingUser ? Icons.gps_fixed : Icons.gps_off,
-              color: isFollowingUser ? Colors.white : const Color(0xFF3B82F6),
-              size: 20,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: Icon(
+                isFollowingUser ? Icons.gps_fixed : Icons.gps_off,
+                key: ValueKey(isFollowingUser),
+                color: isFollowingUser ? Colors.white : const Color(0xFF3B82F6),
+                size: 20,
+              ),
             ),
           ),
         ),

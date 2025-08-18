@@ -57,7 +57,10 @@
             "unavailable": "Location unavailable"
         },
         "map": {
-            "center_error": "Error centering map"
+            "center_error": "Error centering map",
+            "user_moved_map": "Tracking disabled - Map moved manually",
+            "map_stopped": "Map stopped",
+            "tap_to_explore": "Tap to explore the map"
         }
     }
 }

@@ -64,14 +64,23 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
   }
 
   void _toggleFollowUser() {
+    final currentMapState = ref.read(mapProvider);
+    final wasFollowing = currentMapState.isFollowingUser;
+
     ref.read(mapProvider.notifier).reducer(action: ToggleFollowUserAction());
 
-    final mapState = ref.read(mapProvider);
+    final newMapState = ref.read(mapProvider);
+
+    // Si se activó el seguimiento, centrar el mapa inmediatamente
+    if (!wasFollowing && newMapState.isFollowingUser) {
+      _animateToUserLocation();
+    }
+
     _showSnackBar(
-      mapState.isFollowingUser
+      newMapState.isFollowingUser
           ? 'maps.auto_center_enabled'.tr()
           : 'maps.auto_center_disabled'.tr(),
-      mapState.isFollowingUser
+      newMapState.isFollowingUser
           ? const Color(0xFF10B981)
           : const Color(0xFF6B7280),
     );
@@ -182,6 +191,27 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
           ref
               .read(mapProvider.notifier)
               .reducer(action: SetFollowUserAction(false));
+        }
+      },
+      onCameraMoveStarted: () {
+        // El usuario comenzó a mover el mapa
+        final mapState = ref.read(mapProvider);
+        if (mapState.isFollowingUser) {
+          _showSnackBar('maps.user_moved_map'.tr(), const Color(0xFFF59E0B));
+        }
+      },
+      onCameraIdle: () {
+        // El mapa se detuvo de moverse
+        final mapState = ref.read(mapProvider);
+        if (!mapState.isFollowingUser) {
+          _showSnackBar('maps.map_stopped'.tr(), const Color(0xFF6B7280));
+        }
+      },
+      onTap: (LatLng position) {
+        // El usuario tocó el mapa
+        final mapState = ref.read(mapProvider);
+        if (mapState.isFollowingUser) {
+          _showSnackBar('maps.tap_to_explore'.tr(), const Color(0xFF3B82F6));
         }
       },
       myLocationEnabled: true,

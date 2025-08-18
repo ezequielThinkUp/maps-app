@@ -57,7 +57,10 @@
             "unavailable": "Ubicación no disponible"
         },
         "map": {
-            "center_error": "Error al centrar mapa"
+            "center_error": "Error al centrar mapa",
+            "user_moved_map": "Seguimiento desactivado - Mapa movido manualmente",
+            "map_stopped": "Mapa detenido",
+            "tap_to_explore": "Toca para explorar el mapa"
         }
     }
 }
