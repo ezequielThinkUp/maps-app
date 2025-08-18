@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class MapFollowUserButton extends StatelessWidget {
-  final bool isActive;
-  final VoidCallback onPressed;
+  final bool isFollowingUser;
+  final VoidCallback onToggleFollowUser;
 
   const MapFollowUserButton({
     super.key,
-    required this.isActive,
-    required this.onPressed,
+    required this.isFollowingUser,
+    required this.onToggleFollowUser,
   });
 
   @override
@@ -19,10 +19,12 @@ class MapFollowUserButton extends StatelessWidget {
         width: 45,
         height: 45,
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF10B981) : Colors.white,
+          color: isFollowingUser ? const Color(0xFF10B981) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isActive ? const Color(0xFF10B981) : const Color(0xFFE5E7EB),
+            color: isFollowingUser
+                ? const Color(0xFF10B981)
+                : const Color(0xFFE5E7EB),
             width: 1,
           ),
           boxShadow: [
@@ -36,11 +38,11 @@ class MapFollowUserButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: onPressed,
+            onTap: onToggleFollowUser,
             borderRadius: BorderRadius.circular(12),
             child: Icon(
-              isActive ? Icons.gps_fixed : Icons.gps_off,
-              color: isActive ? Colors.white : const Color(0xFF3B82F6),
+              isFollowingUser ? Icons.gps_fixed : Icons.gps_off,
+              color: isFollowingUser ? Colors.white : const Color(0xFF3B82F6),
               size: 20,
             ),
           ),

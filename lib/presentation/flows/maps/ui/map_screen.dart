@@ -5,9 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../base/base_stateful_widget.dart';
 import '../../../base/content_state/content_state_widget.dart';
-import '../provider/location_notifier.dart';
-import '../provider/location_action.dart';
-import '../provider/location_state.dart';
+import '../provider/provider.dart';
 import '../widgets/widgets.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
@@ -21,8 +19,6 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends BaseStatefulWidget<MapScreen> {
   GoogleMapController? _mapController;
-  bool _isMapReady = false;
-  bool _autoCenter = true;
 
   @override
   void initState() {
@@ -67,16 +63,17 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
     }
   }
 
-  void _toggleAutoCenter() {
-    setState(() {
-      _autoCenter = !_autoCenter;
-    });
+  void _toggleFollowUser() {
+    ref.read(mapProvider.notifier).reducer(action: ToggleFollowUserAction());
 
+    final mapState = ref.read(mapProvider);
     _showSnackBar(
-      _autoCenter
+      mapState.isFollowingUser
           ? 'maps.auto_center_enabled'.tr()
           : 'maps.auto_center_disabled'.tr(),
-      _autoCenter ? const Color(0xFF10B981) : const Color(0xFF6B7280),
+      mapState.isFollowingUser
+          ? const Color(0xFF10B981)
+          : const Color(0xFF6B7280),
     );
   }
 
@@ -93,7 +90,8 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
   }
 
   void _onLocationUpdate() {
-    if (_autoCenter && _isMapReady) {
+    final mapState = ref.read(mapProvider);
+    if (mapState.isFollowingUser && mapState.isMapInitialized) {
       _animateToUserLocation();
     }
   }
@@ -109,6 +107,7 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
   @override
   Widget buildView(BuildContext context) {
     final locationState = ref.watch(locationProvider);
+    final mapState = ref.watch(mapProvider);
     final position = locationState.lastKnownPosition;
 
     ref.listen<LocationState>(locationProvider, (previous, next) {
@@ -133,25 +132,23 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
             MapBottomPanel(
               position: position,
               isTracking: locationState.isTracking,
-              isMapReady: _isMapReady,
-              autoCenter: _autoCenter,
+              isMapReady: mapState.isMapInitialized,
+              autoCenter: mapState.isFollowingUser,
               onStartStopTracking: _onStartStopTracking,
-              onCenterMap: _isMapReady ? _animateToUserLocation : null,
-              onToggleAutoCenter: _toggleAutoCenter,
+              onCenterMap: mapState.isMapInitialized
+                  ? _animateToUserLocation
+                  : null,
+              onToggleAutoCenter: _toggleFollowUser,
             ),
 
-            // Follow User Button (auto-center)
+            // Follow User Button
             MapFollowUserButton(
-              isActive: _autoCenter,
-              onPressed: () {
-                final wasActive = _autoCenter;
-                _toggleAutoCenter();
-                if (!wasActive) _animateToUserLocation();
-              },
+              isFollowingUser: mapState.isFollowingUser,
+              onToggleFollowUser: _toggleFollowUser,
             ),
 
             // Zoom Controls
-            if (_isMapReady)
+            if (mapState.isMapInitialized)
               MapZoomControls(
                 onZoomIn: () =>
                     _mapController?.animateCamera(CameraUpdate.zoomIn()),
@@ -177,15 +174,14 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
       ),
       onMapCreated: (GoogleMapController controller) {
         _mapController = controller;
-        setState(() {
-          _isMapReady = true;
-        });
+        ref.read(mapProvider.notifier).reducer(action: InitializeMapAction());
       },
       onCameraMove: (CameraPosition position) {
-        if (_autoCenter) {
-          setState(() {
-            _autoCenter = false;
-          });
+        final mapState = ref.read(mapProvider);
+        if (mapState.isFollowingUser) {
+          ref
+              .read(mapProvider.notifier)
+              .reducer(action: SetFollowUserAction(false));
         }
       },
       myLocationEnabled: true,
