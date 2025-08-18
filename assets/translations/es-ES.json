@@ -34,6 +34,8 @@
         "auto_center_enabled": "Centrado automático activado",
         "auto_center_disabled": "Centrado automático desactivado",
         "loading_map": "Cargando mapa...",
+        "search_placeholder": "Buscar lugares...",
+        "location_selected": "Ubicación seleccionada",
         "tracking": {
             "start": "Seguir",
             "stop": "Detener",
@@ -64,9 +66,7 @@
             "route_cleared": "Ruta limpiada",
             "route_info": "Información de la ruta",
             "distance": "Distancia",
-            "points": "Puntos",
-            "search_placeholder": "Buscar lugares...",
-            "location_selected": "Ubicación seleccionada"
+            "points": "Puntos"
         }
     }
 }

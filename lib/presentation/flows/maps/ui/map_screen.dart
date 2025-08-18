@@ -186,14 +186,6 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
               onResultSelected: _onResultSelected,
             ),
 
-            // Top App Bar (moved down to make room for search)
-            Positioned(
-              top: 80,
-              left: 0,
-              right: 0,
-              child: MapTopBar(isTracking: locationState.isTracking),
-            ),
-
             // Bottom Controls
             MapBottomPanel(
               position: position,

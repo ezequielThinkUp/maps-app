@@ -34,6 +34,8 @@
         "auto_center_enabled": "Auto center enabled",
         "auto_center_disabled": "Auto center disabled",
         "loading_map": "Loading map...",
+        "search_placeholder": "Search places...",
+        "location_selected": "Location selected",
         "tracking": {
             "start": "Track",
             "stop": "Stop",
@@ -64,9 +66,7 @@
             "route_cleared": "Route cleared",
             "route_info": "Route information",
             "distance": "Distance",
-            "points": "Points",
-            "search_placeholder": "Search places...",
-            "location_selected": "Location selected"
+            "points": "Points"
         }
     }
 }
