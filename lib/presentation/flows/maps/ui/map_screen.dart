@@ -140,6 +140,16 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
               onToggleAutoCenter: _toggleAutoCenter,
             ),
 
+            // Follow User Button (auto-center)
+            MapFollowUserButton(
+              isActive: _autoCenter,
+              onPressed: () {
+                final wasActive = _autoCenter;
+                _toggleAutoCenter();
+                if (!wasActive) _animateToUserLocation();
+              },
+            ),
+
             // Zoom Controls
             if (_isMapReady)
               MapZoomControls(
