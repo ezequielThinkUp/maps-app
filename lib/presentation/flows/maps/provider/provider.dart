@@ -5,3 +5,6 @@ export 'location_action.dart';
 export 'map_notifier.dart';
 export 'map_state.dart';
 export 'map_action.dart';
+export 'search_notifier.dart';
+export 'search_state.dart';
+export 'search_action.dart';

@@ -64,7 +64,9 @@
             "route_cleared": "Route cleared",
             "route_info": "Route information",
             "distance": "Distance",
-            "points": "Points"
+            "points": "Points",
+            "search_placeholder": "Search places...",
+            "location_selected": "Location selected"
         }
     }
 }

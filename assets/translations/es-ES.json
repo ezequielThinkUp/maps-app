@@ -64,7 +64,9 @@
             "route_cleared": "Ruta limpiada",
             "route_info": "Información de la ruta",
             "distance": "Distancia",
-            "points": "Puntos"
+            "points": "Puntos",
+            "search_placeholder": "Buscar lugares...",
+            "location_selected": "Ubicación seleccionada"
         }
     }
 }

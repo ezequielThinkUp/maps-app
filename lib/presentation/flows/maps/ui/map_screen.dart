@@ -19,6 +19,7 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends BaseStatefulWidget<MapScreen> {
   GoogleMapController? _mapController;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -29,6 +30,7 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
   @override
   void dispose() {
     _stopLocationTracking();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -118,10 +120,41 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
     _showSnackBar('maps.route_cleared'.tr(), const Color(0xFFEF4444));
   }
 
+  void _onSearch() {
+    final query = _searchController.text.trim();
+    if (query.isNotEmpty) {
+      ref
+          .read(searchProvider.notifier)
+          .reducer(action: StartSearchAction(query));
+    }
+  }
+
+  void _onClearSearch() {
+    _searchController.clear();
+    ref.read(searchProvider.notifier).reducer(action: ClearSearchAction());
+  }
+
+  void _onResultSelected(SearchResult result) {
+    ref
+        .read(searchProvider.notifier)
+        .reducer(action: SelectResultAction(result));
+    _searchController.text = result.name;
+
+    // Animar el mapa a la ubicación seleccionada
+    _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: result.location, zoom: 15),
+      ),
+    );
+
+    _showSnackBar('maps.location_selected'.tr(), const Color(0xFF10B981));
+  }
+
   @override
   Widget buildView(BuildContext context) {
     final locationState = ref.watch(locationProvider);
     final mapState = ref.watch(mapProvider);
+    final searchState = ref.watch(searchProvider);
     final position = locationState.lastKnownPosition;
 
     ref.listen<LocationState>(locationProvider, (previous, next) {
@@ -139,8 +172,27 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
             // Google Map
             _buildMap(position),
 
-            // Top App Bar
-            MapTopBar(isTracking: locationState.isTracking),
+            // Search Bar
+            MapSearchBar(
+              controller: _searchController,
+              onSearch: _onSearch,
+              onClear: _onClearSearch,
+              isSearching: searchState.isSearching,
+            ),
+
+            // Search Results
+            SearchResults(
+              results: searchState.results,
+              onResultSelected: _onResultSelected,
+            ),
+
+            // Top App Bar (moved down to make room for search)
+            Positioned(
+              top: 80,
+              left: 0,
+              right: 0,
+              child: MapTopBar(isTracking: locationState.isTracking),
+            ),
 
             // Bottom Controls
             MapBottomPanel(
