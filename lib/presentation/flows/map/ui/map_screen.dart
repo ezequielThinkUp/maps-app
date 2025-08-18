@@ -8,6 +8,7 @@ import '../../../base/content_state/content_state_widget.dart';
 import '../provider/provider.dart';
 import '../widgets/widgets.dart';
 import '../../location/provider/provider.dart';
+import '../../location/widgets/widgets.dart';
 import '../../search/provider/provider.dart';
 import '../../search/widgets/widgets.dart';
 
