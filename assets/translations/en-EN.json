@@ -1,0 +1,63 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "back": "Back",
+        "next": "Next",
+        "done": "Done"
+    },
+    "gps": {
+        "title": "GPS Access",
+        "enable_message": "You must enable GPS to use the application",
+        "request_access": "Request access",
+        "permission_granted": "Permission granted",
+        "permission_denied": "Permission denied",
+        "gps_disabled": "GPS disabled",
+        "gps_enabled": "GPS enabled"
+    },
+    "maps": {
+        "title": "Map",
+        "my_location": "My Location",
+        "location_tracking": "Tracking location",
+        "location_stopped": "Location stopped",
+        "current_coordinates": "Current coordinates",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "your_location": "Your location",
+        "center_location": "Centered on your location",
+        "auto_center": "Auto center",
+        "auto_center_enabled": "Auto center enabled",
+        "auto_center_disabled": "Auto center disabled",
+        "loading_map": "Loading map...",
+        "tracking": {
+            "start": "Track",
+            "stop": "Stop",
+            "active": "ON",
+            "inactive": "OFF"
+        },
+        "controls": {
+            "center": "Center",
+            "zoom_in": "Zoom in",
+            "zoom_out": "Zoom out"
+        }
+    },
+    "errors": {
+        "network": "Connection error",
+        "server": "Server error",
+        "unknown": "Unknown error",
+        "permission": "Permission denied",
+        "location": {
+            "disabled": "Location disabled",
+            "denied": "Location permission denied",
+            "unavailable": "Location unavailable"
+        },
+        "map": {
+            "center_error": "Error centering map"
+        }
+    }
+}
