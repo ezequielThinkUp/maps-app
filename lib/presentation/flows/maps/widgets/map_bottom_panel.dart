@@ -9,6 +9,7 @@ class MapBottomPanel extends StatelessWidget {
   final bool isTracking;
   final bool isMapReady;
   final bool autoCenter;
+  final List<Position> routePoints;
   final VoidCallback onStartStopTracking;
   final VoidCallback? onCenterMap;
   final VoidCallback onToggleAutoCenter;
@@ -19,6 +20,7 @@ class MapBottomPanel extends StatelessWidget {
     required this.isTracking,
     required this.isMapReady,
     required this.autoCenter,
+    required this.routePoints,
     required this.onStartStopTracking,
     this.onCenterMap,
     required this.onToggleAutoCenter,
@@ -50,6 +52,9 @@ class MapBottomPanel extends StatelessWidget {
             // Location Info Card
             if (position != null) _buildLocationInfoCard(),
             const SizedBox(height: 15),
+            // Route Info Card
+            if (routePoints.length > 1) _buildRouteInfoCard(),
+            if (routePoints.length > 1) const SizedBox(height: 15),
             // Control Buttons
             _buildControlButtons(),
             const SizedBox(height: 10),
@@ -159,6 +164,92 @@ class MapBottomPanel extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _buildRouteInfoCard() {
+    final distance = _calculateRouteDistance();
+    final points = routePoints.length;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF10B981).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.route,
+                  color: Color(0xFF10B981),
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'maps.route_info'.tr(),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1F2937),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
+          Row(
+            children: [
+              Expanded(
+                child: CoordinateItem(
+                  label: 'maps.distance'.tr(),
+                  value: '${distance.toStringAsFixed(2)} m',
+                  icon: Icons.straighten,
+                ),
+              ),
+              const SizedBox(width: 15),
+              Expanded(
+                child: CoordinateItem(
+                  label: 'maps.points'.tr(),
+                  value: '$points',
+                  icon: Icons.location_on,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  double _calculateRouteDistance() {
+    if (routePoints.length < 2) return 0.0;
+
+    double totalDistance = 0.0;
+    for (int i = 0; i < routePoints.length - 1; i++) {
+      totalDistance += Geolocator.distanceBetween(
+        routePoints[i].latitude,
+        routePoints[i].longitude,
+        routePoints[i + 1].latitude,
+        routePoints[i + 1].longitude,
+      );
+    }
+    return totalDistance;
   }
 
   Widget _buildAutoCenterToggle() {

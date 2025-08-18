@@ -28,7 +28,10 @@ class LocationNotifier
         _stopTracking();
         break;
       case UpdatePositionAction(:final position):
-        state = state.copyWith(lastKnownPosition: position);
+        _updatePosition(position);
+        break;
+      case ClearRouteAction():
+        _clearRoute();
         break;
     }
   }
@@ -57,6 +60,20 @@ class LocationNotifier
     await _positionSubscription?.cancel();
     _positionSubscription = null;
     state = state.copyWith(isTracking: false);
+  }
+
+  void _updatePosition(geo.Position position) {
+    final newRoutePoints = List<geo.Position>.from(state.routePoints);
+    newRoutePoints.add(position);
+
+    state = state.copyWith(
+      lastKnownPosition: position,
+      routePoints: newRoutePoints,
+    );
+  }
+
+  void _clearRoute() {
+    state = state.copyWith(routePoints: []);
   }
 
   Future<bool> _ensurePermission() async {

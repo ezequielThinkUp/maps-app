@@ -113,6 +113,11 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
     }
   }
 
+  void _clearRoute() {
+    ref.read(locationProvider.notifier).reducer(action: ClearRouteAction());
+    _showSnackBar('maps.route_cleared'.tr(), const Color(0xFFEF4444));
+  }
+
   @override
   Widget buildView(BuildContext context) {
     final locationState = ref.watch(locationProvider);
@@ -143,6 +148,7 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
               isTracking: locationState.isTracking,
               isMapReady: mapState.isMapInitialized,
               autoCenter: mapState.isFollowingUser,
+              routePoints: locationState.routePoints,
               onStartStopTracking: _onStartStopTracking,
               onCenterMap: mapState.isMapInitialized
                   ? _animateToUserLocation
@@ -154,6 +160,12 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
             MapFollowUserButton(
               isFollowingUser: mapState.isFollowingUser,
               onToggleFollowUser: _toggleFollowUser,
+            ),
+
+            // Clear Route Button
+            ClearRouteButton(
+              hasRoute: locationState.routePoints.length > 1,
+              onClearRoute: _clearRoute,
             ),
 
             // Zoom Controls
@@ -174,6 +186,9 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
     if (position == null) {
       return _buildLoadingContainer();
     }
+
+    final locationState = ref.watch(locationProvider);
+    final routePoints = locationState.routePoints;
 
     return GoogleMap(
       initialCameraPosition: CameraPosition(
@@ -232,6 +247,19 @@ class _MapScreenState extends BaseStatefulWidget<MapScreen> {
           ),
         ),
       },
+      polylines: routePoints.length > 1
+          ? {
+              Polyline(
+                polylineId: const PolylineId('user_route'),
+                points: routePoints
+                    .map((point) => LatLng(point.latitude, point.longitude))
+                    .toList(),
+                color: const Color(0xFF3B82F6),
+                width: 4,
+                geodesic: true,
+              ),
+            }
+          : {},
     );
   }
 

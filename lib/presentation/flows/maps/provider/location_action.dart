@@ -10,3 +10,5 @@ class UpdatePositionAction extends LocationAction {
   final geo.Position position;
   UpdatePositionAction(this.position);
 }
+
+class ClearRouteAction extends LocationAction {}
