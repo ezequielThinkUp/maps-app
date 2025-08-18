@@ -8,7 +8,7 @@ import '../provider/gps_notifier.dart';
 import '../provider/gps_action.dart';
 import '../provider/gps_state.dart';
 import '../widgets/widgets.dart';
-import '../../maps/ui/map_screen.dart';
+import '../../map/ui/map_screen.dart';
 
 class GpsAccessScreen extends ConsumerStatefulWidget {
   const GpsAccessScreen({super.key});

@@ -7,6 +7,9 @@ import '../../../base/base_stateful_widget.dart';
 import '../../../base/content_state/content_state_widget.dart';
 import '../provider/provider.dart';
 import '../widgets/widgets.dart';
+import '../../location/provider/provider.dart';
+import '../../search/provider/provider.dart';
+import '../../search/widgets/widgets.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
