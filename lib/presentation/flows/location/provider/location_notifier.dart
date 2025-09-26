@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart' as geo;
 import '../../../base/base_provider.dart';
@@ -9,14 +8,18 @@ import 'location_state.dart';
 
 class LocationNotifier
     extends BaseStateNotifier<LocationState, LocationAction> {
-  LocationNotifier(Ref ref)
-    : _positionStreamController = StreamController<geo.Position>.broadcast(),
-      super(state: const LocationState(), ref: ref);
+  StreamSubscription<geo.Position>? _positionStream;
+  Timer? _trackingTimer;
+  static const _minDistance = 10.0; // Metros mínimos entre puntos
+  static const _trackingInterval = Duration(seconds: 5);
 
-  final StreamController<geo.Position> _positionStreamController;
-  StreamSubscription<geo.Position>? _positionSubscription;
+  LocationNotifier(Ref ref) : super(state: const LocationState(), ref: ref);
 
-  Stream<geo.Position> get positionStream => _positionStreamController.stream;
+  @override
+  void dispose() {
+    _stopTracking();
+    super.dispose();
+  }
 
   @override
   void reducer({required LocationAction action}) {
@@ -38,61 +41,128 @@ class LocationNotifier
 
   Future<void> _startTracking() async {
     if (state.isTracking) return;
-    final hasPermission = await _ensurePermission();
-    if (!hasPermission) return;
 
-    final positionStream = geo.Geolocator.getPositionStream(
-      locationSettings: const geo.LocationSettings(
-        accuracy: geo.LocationAccuracy.best,
-        distanceFilter: 5,
-      ),
-    );
+    try {
+      final permission = await geo.Geolocator.checkPermission();
+      if (permission == geo.LocationPermission.denied) {
+        final requested = await geo.Geolocator.requestPermission();
+        if (requested == geo.LocationPermission.denied) {
+          state = state.copyWith(
+            errorMessage: 'Location permission denied',
+            isTracking: false,
+          );
+          return;
+        }
+      }
 
-    _positionSubscription = positionStream.listen((geo.Position position) {
-      _positionStreamController.add(position);
-      reducer(action: UpdatePositionAction(position));
-    });
+      final isEnabled = await geo.Geolocator.isLocationServiceEnabled();
+      if (!isEnabled) {
+        state = state.copyWith(
+          errorMessage: 'Location services are disabled',
+          isTracking: false,
+        );
+        return;
+      }
 
-    state = state.copyWith(isTracking: true);
+      // Iniciar tracking
+      state = state.copyWith(
+        isTracking: true,
+        trackingStartTime: DateTime.now(),
+        errorMessage: null,
+      );
+
+      // Configurar stream de posición
+      const locationSettings = geo.LocationSettings(
+        accuracy: geo.LocationAccuracy.high,
+        distanceFilter: 10,
+      );
+
+      _positionStream =
+          geo.Geolocator.getPositionStream(
+            locationSettings: locationSettings,
+          ).listen(
+            (position) => reducer(action: UpdatePositionAction(position)),
+            onError: (error) {
+              state = state.copyWith(
+                errorMessage: 'Error tracking location: $error',
+                isTracking: false,
+              );
+              _stopTracking();
+            },
+          );
+
+      // Iniciar timer para actualizar distancia
+      _trackingTimer = Timer.periodic(_trackingInterval, (_) {
+        _updateTotalDistance();
+      });
+    } catch (e) {
+      state = state.copyWith(
+        errorMessage: 'Error starting tracking: $e',
+        isTracking: false,
+      );
+    }
   }
 
-  Future<void> _stopTracking() async {
-    await _positionSubscription?.cancel();
-    _positionSubscription = null;
-    state = state.copyWith(isTracking: false);
+  void _stopTracking() {
+    _positionStream?.cancel();
+    _trackingTimer?.cancel();
+    state = state.copyWith(isTracking: false, trackingStartTime: null);
   }
 
   void _updatePosition(geo.Position position) {
-    final newRoutePoints = List<geo.Position>.from(state.routePoints);
-    newRoutePoints.add(position);
+    if (!state.isTracking) return;
 
-    state = state.copyWith(
-      lastKnownPosition: position,
-      routePoints: newRoutePoints,
-    );
+    final lastPosition = state.lastKnownPosition;
+    if (lastPosition != null) {
+      final distance = geo.Geolocator.distanceBetween(
+        lastPosition.latitude,
+        lastPosition.longitude,
+        position.latitude,
+        position.longitude,
+      );
+
+      // Solo agregar punto si la distancia es significativa
+      if (distance >= _minDistance) {
+        state = state.copyWith(
+          lastKnownPosition: position,
+          routePoints: [...state.routePoints, position],
+        );
+        _updateTotalDistance();
+      }
+    } else {
+      // Primer punto
+      state = state.copyWith(
+        lastKnownPosition: position,
+        routePoints: [position],
+      );
+    }
+  }
+
+  void _updateTotalDistance() {
+    if (state.routePoints.length < 2) return;
+
+    double total = 0;
+    for (int i = 0; i < state.routePoints.length - 1; i++) {
+      final current = state.routePoints[i];
+      final next = state.routePoints[i + 1];
+
+      total += geo.Geolocator.distanceBetween(
+        current.latitude,
+        current.longitude,
+        next.latitude,
+        next.longitude,
+      );
+    }
+
+    state = state.copyWith(totalDistance: total);
   }
 
   void _clearRoute() {
-    state = state.copyWith(routePoints: []);
-  }
-
-  Future<bool> _ensurePermission() async {
-    final serviceEnabled = await geo.Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return false;
-
-    var permission = await geo.Geolocator.checkPermission();
-    if (permission == geo.LocationPermission.denied) {
-      permission = await geo.Geolocator.requestPermission();
-    }
-    return permission == geo.LocationPermission.whileInUse ||
-        permission == geo.LocationPermission.always;
-  }
-
-  @override
-  void dispose() {
-    _positionSubscription?.cancel();
-    _positionStreamController.close();
-    super.dispose();
+    state = state.copyWith(
+      routePoints: [],
+      totalDistance: 0,
+      trackingStartTime: state.isTracking ? DateTime.now() : null,
+    );
   }
 }
 

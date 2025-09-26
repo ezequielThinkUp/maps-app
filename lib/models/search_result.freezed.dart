@@ -12,8 +12,7 @@ part of 'search_result.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 SearchResult _$SearchResultFromJson(Map<String, dynamic> json) {
   return _SearchResult.fromJson(json);
@@ -51,27 +50,25 @@ mixin _$SearchResult {
 /// @nodoc
 abstract class $SearchResultCopyWith<$Res> {
   factory $SearchResultCopyWith(
-    SearchResult value,
-    $Res Function(SearchResult) then,
-  ) = _$SearchResultCopyWithImpl<$Res, SearchResult>;
+          SearchResult value, $Res Function(SearchResult) then) =
+      _$SearchResultCopyWithImpl<$Res, SearchResult>;
   @useResult
-  $Res call({
-    String name,
-    String address,
-    @LatLngConverter() LatLng location,
-    String? placeId,
-    String? icon,
-    double? rating,
-    int? userRatingsTotal,
-    String? types,
-    bool? isOpenNow,
-    String? priceLevel,
-    String? vicinity,
-    String? formattedAddress,
-    String? internationalPhoneNumber,
-    String? website,
-    String? url,
-  });
+  $Res call(
+      {String name,
+      String address,
+      @LatLngConverter() LatLng location,
+      String? placeId,
+      String? icon,
+      double? rating,
+      int? userRatingsTotal,
+      String? types,
+      bool? isOpenNow,
+      String? priceLevel,
+      String? vicinity,
+      String? formattedAddress,
+      String? internationalPhoneNumber,
+      String? website,
+      String? url});
 }
 
 /// @nodoc
@@ -105,71 +102,68 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
     Object? website = freezed,
     Object? url = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            name: null == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
-                      as String,
-            address: null == address
-                ? _value.address
-                : address // ignore: cast_nullable_to_non_nullable
-                      as String,
-            location: null == location
-                ? _value.location
-                : location // ignore: cast_nullable_to_non_nullable
-                      as LatLng,
-            placeId: freezed == placeId
-                ? _value.placeId
-                : placeId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            icon: freezed == icon
-                ? _value.icon
-                : icon // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            rating: freezed == rating
-                ? _value.rating
-                : rating // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            userRatingsTotal: freezed == userRatingsTotal
-                ? _value.userRatingsTotal
-                : userRatingsTotal // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            types: freezed == types
-                ? _value.types
-                : types // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            isOpenNow: freezed == isOpenNow
-                ? _value.isOpenNow
-                : isOpenNow // ignore: cast_nullable_to_non_nullable
-                      as bool?,
-            priceLevel: freezed == priceLevel
-                ? _value.priceLevel
-                : priceLevel // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            vicinity: freezed == vicinity
-                ? _value.vicinity
-                : vicinity // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            formattedAddress: freezed == formattedAddress
-                ? _value.formattedAddress
-                : formattedAddress // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            internationalPhoneNumber: freezed == internationalPhoneNumber
-                ? _value.internationalPhoneNumber
-                : internationalPhoneNumber // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            website: freezed == website
-                ? _value.website
-                : website // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            url: freezed == url
-                ? _value.url
-                : url // ignore: cast_nullable_to_non_nullable
-                      as String?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as LatLng,
+      placeId: freezed == placeId
+          ? _value.placeId
+          : placeId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      icon: freezed == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
+      rating: freezed == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as double?,
+      userRatingsTotal: freezed == userRatingsTotal
+          ? _value.userRatingsTotal
+          : userRatingsTotal // ignore: cast_nullable_to_non_nullable
+              as int?,
+      types: freezed == types
+          ? _value.types
+          : types // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isOpenNow: freezed == isOpenNow
+          ? _value.isOpenNow
+          : isOpenNow // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      priceLevel: freezed == priceLevel
+          ? _value.priceLevel
+          : priceLevel // ignore: cast_nullable_to_non_nullable
+              as String?,
+      vicinity: freezed == vicinity
+          ? _value.vicinity
+          : vicinity // ignore: cast_nullable_to_non_nullable
+              as String?,
+      formattedAddress: freezed == formattedAddress
+          ? _value.formattedAddress
+          : formattedAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      internationalPhoneNumber: freezed == internationalPhoneNumber
+          ? _value.internationalPhoneNumber
+          : internationalPhoneNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      website: freezed == website
+          ? _value.website
+          : website // ignore: cast_nullable_to_non_nullable
+              as String?,
+      url: freezed == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
   }
 }
 
@@ -177,28 +171,26 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
 abstract class _$$SearchResultImplCopyWith<$Res>
     implements $SearchResultCopyWith<$Res> {
   factory _$$SearchResultImplCopyWith(
-    _$SearchResultImpl value,
-    $Res Function(_$SearchResultImpl) then,
-  ) = __$$SearchResultImplCopyWithImpl<$Res>;
+          _$SearchResultImpl value, $Res Function(_$SearchResultImpl) then) =
+      __$$SearchResultImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String name,
-    String address,
-    @LatLngConverter() LatLng location,
-    String? placeId,
-    String? icon,
-    double? rating,
-    int? userRatingsTotal,
-    String? types,
-    bool? isOpenNow,
-    String? priceLevel,
-    String? vicinity,
-    String? formattedAddress,
-    String? internationalPhoneNumber,
-    String? website,
-    String? url,
-  });
+  $Res call(
+      {String name,
+      String address,
+      @LatLngConverter() LatLng location,
+      String? placeId,
+      String? icon,
+      double? rating,
+      int? userRatingsTotal,
+      String? types,
+      bool? isOpenNow,
+      String? priceLevel,
+      String? vicinity,
+      String? formattedAddress,
+      String? internationalPhoneNumber,
+      String? website,
+      String? url});
 }
 
 /// @nodoc
@@ -206,9 +198,8 @@ class __$$SearchResultImplCopyWithImpl<$Res>
     extends _$SearchResultCopyWithImpl<$Res, _$SearchResultImpl>
     implements _$$SearchResultImplCopyWith<$Res> {
   __$$SearchResultImplCopyWithImpl(
-    _$SearchResultImpl _value,
-    $Res Function(_$SearchResultImpl) _then,
-  ) : super(_value, _then);
+      _$SearchResultImpl _value, $Res Function(_$SearchResultImpl) _then)
+      : super(_value, _then);
 
   /// Create a copy of SearchResult
   /// with the given fields replaced by the non-null parameter values.
@@ -231,93 +222,90 @@ class __$$SearchResultImplCopyWithImpl<$Res>
     Object? website = freezed,
     Object? url = freezed,
   }) {
-    return _then(
-      _$SearchResultImpl(
-        name: null == name
-            ? _value.name
-            : name // ignore: cast_nullable_to_non_nullable
-                  as String,
-        address: null == address
-            ? _value.address
-            : address // ignore: cast_nullable_to_non_nullable
-                  as String,
-        location: null == location
-            ? _value.location
-            : location // ignore: cast_nullable_to_non_nullable
-                  as LatLng,
-        placeId: freezed == placeId
-            ? _value.placeId
-            : placeId // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        icon: freezed == icon
-            ? _value.icon
-            : icon // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        rating: freezed == rating
-            ? _value.rating
-            : rating // ignore: cast_nullable_to_non_nullable
-                  as double?,
-        userRatingsTotal: freezed == userRatingsTotal
-            ? _value.userRatingsTotal
-            : userRatingsTotal // ignore: cast_nullable_to_non_nullable
-                  as int?,
-        types: freezed == types
-            ? _value.types
-            : types // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        isOpenNow: freezed == isOpenNow
-            ? _value.isOpenNow
-            : isOpenNow // ignore: cast_nullable_to_non_nullable
-                  as bool?,
-        priceLevel: freezed == priceLevel
-            ? _value.priceLevel
-            : priceLevel // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        vicinity: freezed == vicinity
-            ? _value.vicinity
-            : vicinity // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        formattedAddress: freezed == formattedAddress
-            ? _value.formattedAddress
-            : formattedAddress // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        internationalPhoneNumber: freezed == internationalPhoneNumber
-            ? _value.internationalPhoneNumber
-            : internationalPhoneNumber // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        website: freezed == website
-            ? _value.website
-            : website // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        url: freezed == url
-            ? _value.url
-            : url // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+    return _then(_$SearchResultImpl(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as LatLng,
+      placeId: freezed == placeId
+          ? _value.placeId
+          : placeId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      icon: freezed == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
+      rating: freezed == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as double?,
+      userRatingsTotal: freezed == userRatingsTotal
+          ? _value.userRatingsTotal
+          : userRatingsTotal // ignore: cast_nullable_to_non_nullable
+              as int?,
+      types: freezed == types
+          ? _value.types
+          : types // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isOpenNow: freezed == isOpenNow
+          ? _value.isOpenNow
+          : isOpenNow // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      priceLevel: freezed == priceLevel
+          ? _value.priceLevel
+          : priceLevel // ignore: cast_nullable_to_non_nullable
+              as String?,
+      vicinity: freezed == vicinity
+          ? _value.vicinity
+          : vicinity // ignore: cast_nullable_to_non_nullable
+              as String?,
+      formattedAddress: freezed == formattedAddress
+          ? _value.formattedAddress
+          : formattedAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      internationalPhoneNumber: freezed == internationalPhoneNumber
+          ? _value.internationalPhoneNumber
+          : internationalPhoneNumber // ignore: cast_nullable_to_non_nullable
+              as String?,
+      website: freezed == website
+          ? _value.website
+          : website // ignore: cast_nullable_to_non_nullable
+              as String?,
+      url: freezed == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$SearchResultImpl implements _SearchResult {
-  const _$SearchResultImpl({
-    required this.name,
-    required this.address,
-    @LatLngConverter() required this.location,
-    this.placeId,
-    this.icon,
-    this.rating,
-    this.userRatingsTotal,
-    this.types,
-    this.isOpenNow,
-    this.priceLevel,
-    this.vicinity,
-    this.formattedAddress,
-    this.internationalPhoneNumber,
-    this.website,
-    this.url,
-  });
+  const _$SearchResultImpl(
+      {required this.name,
+      required this.address,
+      @LatLngConverter() required this.location,
+      this.placeId,
+      this.icon,
+      this.rating,
+      this.userRatingsTotal,
+      this.types,
+      this.isOpenNow,
+      this.priceLevel,
+      this.vicinity,
+      this.formattedAddress,
+      this.internationalPhoneNumber,
+      this.website,
+      this.url});
 
   factory _$SearchResultImpl.fromJson(Map<String, dynamic> json) =>
       _$$SearchResultImplFromJson(json);
@@ -383,9 +371,7 @@ class _$SearchResultImpl implements _SearchResult {
             (identical(other.formattedAddress, formattedAddress) ||
                 other.formattedAddress == formattedAddress) &&
             (identical(
-                  other.internationalPhoneNumber,
-                  internationalPhoneNumber,
-                ) ||
+                    other.internationalPhoneNumber, internationalPhoneNumber) ||
                 other.internationalPhoneNumber == internationalPhoneNumber) &&
             (identical(other.website, website) || other.website == website) &&
             (identical(other.url, url) || other.url == url));
@@ -394,23 +380,22 @@ class _$SearchResultImpl implements _SearchResult {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    name,
-    address,
-    location,
-    placeId,
-    icon,
-    rating,
-    userRatingsTotal,
-    types,
-    isOpenNow,
-    priceLevel,
-    vicinity,
-    formattedAddress,
-    internationalPhoneNumber,
-    website,
-    url,
-  );
+      runtimeType,
+      name,
+      address,
+      location,
+      placeId,
+      icon,
+      rating,
+      userRatingsTotal,
+      types,
+      isOpenNow,
+      priceLevel,
+      vicinity,
+      formattedAddress,
+      internationalPhoneNumber,
+      website,
+      url);
 
   /// Create a copy of SearchResult
   /// with the given fields replaced by the non-null parameter values.
@@ -422,28 +407,29 @@ class _$SearchResultImpl implements _SearchResult {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SearchResultImplToJson(this);
+    return _$$SearchResultImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _SearchResult implements SearchResult {
-  const factory _SearchResult({
-    required final String name,
-    required final String address,
-    @LatLngConverter() required final LatLng location,
-    final String? placeId,
-    final String? icon,
-    final double? rating,
-    final int? userRatingsTotal,
-    final String? types,
-    final bool? isOpenNow,
-    final String? priceLevel,
-    final String? vicinity,
-    final String? formattedAddress,
-    final String? internationalPhoneNumber,
-    final String? website,
-    final String? url,
-  }) = _$SearchResultImpl;
+  const factory _SearchResult(
+      {required final String name,
+      required final String address,
+      @LatLngConverter() required final LatLng location,
+      final String? placeId,
+      final String? icon,
+      final double? rating,
+      final int? userRatingsTotal,
+      final String? types,
+      final bool? isOpenNow,
+      final String? priceLevel,
+      final String? vicinity,
+      final String? formattedAddress,
+      final String? internationalPhoneNumber,
+      final String? website,
+      final String? url}) = _$SearchResultImpl;
 
   factory _SearchResult.fromJson(Map<String, dynamic> json) =
       _$SearchResultImpl.fromJson;

@@ -10,9 +10,8 @@ _$SearchResultImpl _$$SearchResultImplFromJson(Map<String, dynamic> json) =>
     _$SearchResultImpl(
       name: json['name'] as String,
       address: json['address'] as String,
-      location: const LatLngConverter().fromJson(
-        json['location'] as Map<String, dynamic>,
-      ),
+      location: const LatLngConverter()
+          .fromJson(json['location'] as Map<String, dynamic>),
       placeId: json['placeId'] as String?,
       icon: json['icon'] as String?,
       rating: (json['rating'] as num?)?.toDouble(),

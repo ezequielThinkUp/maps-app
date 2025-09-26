@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart' as geo;
 
-sealed class LocationAction {}
+abstract class LocationAction {}
 
 class StartTrackingAction extends LocationAction {}
 

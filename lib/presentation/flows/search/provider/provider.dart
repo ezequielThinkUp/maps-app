@@ -1,3 +1,7 @@
-export 'search_notifier.dart';
-export 'search_state.dart';
-export 'search_action.dart';
+import '../../../base/base_provider.dart';
+import 'search_notifier.dart';
+import 'search_state.dart';
+
+final searchProvider = baseProvider<SearchNotifier, SearchState>(
+  (ref) => SearchNotifier(ref: ref),
+);
