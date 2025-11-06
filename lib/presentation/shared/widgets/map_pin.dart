@@ -16,7 +16,7 @@ class MapPin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: size,
       height: size * 1.2, // Hacer más alto para la forma de pin
       child: Stack(

@@ -8,9 +8,9 @@ import 'search_state.dart';
 class SearchNotifier extends BaseStateNotifier<SearchState, SearchAction> {
   final PlacesService _placesService;
 
-  SearchNotifier({required Ref ref, PlacesService? placesService})
+  SearchNotifier({required super.ref, PlacesService? placesService})
     : _placesService = placesService ?? PlacesService(),
-      super(state: const SearchState(), ref: ref);
+      super(state: const SearchState());
 
   @override
   void reducer({required SearchAction action}) {

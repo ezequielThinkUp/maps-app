@@ -318,7 +318,7 @@ class TrafficMetricsInterceptor extends Interceptor {
       'successful_requests': successful,
       'failed_requests': failed,
       'success_rate': total > 0
-          ? (successful / total * 100).toStringAsFixed(2) + '%'
+          ? '${(successful / total * 100).toStringAsFixed(2)}%'
           : '0%',
       'average_duration_ms': avgDuration.toStringAsFixed(2),
       'recent_requests': _metrics.take(10).toList(),
