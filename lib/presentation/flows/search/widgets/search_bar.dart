@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../../../../config/theme/color_schema.dart';
 
 class MapSearchBar extends StatefulWidget {
   final TextEditingController controller;
@@ -20,7 +21,7 @@ class MapSearchBar extends StatefulWidget {
     this.isSearching = false,
     this.showManualOption = true,
     this.placeholder = 'maps.search_placeholder',
-    this.accentColor = const Color(0xFF3B82F6),
+    this.accentColor = AppColorSchema.primary,
   });
 
   @override
@@ -28,7 +29,6 @@ class MapSearchBar extends StatefulWidget {
 }
 
 class _MapSearchBarState extends State<MapSearchBar> {
-  bool _showManualOption = false;
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -45,8 +45,9 @@ class _MapSearchBarState extends State<MapSearchBar> {
   }
 
   void _onFocusChange() {
+    // Focus change handler - can be extended for future features
     setState(() {
-      _showManualOption = _focusNode.hasFocus && widget.showManualOption;
+      // Manual option feature can be added here if needed
     });
   }
 
@@ -55,11 +56,11 @@ class _MapSearchBarState extends State<MapSearchBar> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColorSchema.surface,
         borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: AppColorSchema.shadow.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -85,21 +86,24 @@ class _MapSearchBarState extends State<MapSearchBar> {
                 decoration: InputDecoration(
                   hintText: widget.placeholder.tr(),
                   border: InputBorder.none,
-                  hintStyle: const TextStyle(
-                    color: Color(0xFF9CA3AF),
+                  hintStyle: TextStyle(
+                    color: AppColorSchema.onSurfaceVariant,
                     fontSize: 16,
                   ),
                 ),
-                style: const TextStyle(fontSize: 16, color: Color(0xFF1F2937)),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColorSchema.onSurface,
+                ),
                 onSubmitted: (_) => widget.onSearch(),
               ),
             ),
             if (widget.controller.text.isNotEmpty)
               IconButton(
                 onPressed: widget.onClear,
-                icon: const Icon(
+                icon: Icon(
                   Icons.clear,
-                  color: Color(0xFF6B7280),
+                  color: AppColorSchema.onSurfaceVariant,
                   size: 20,
                 ),
               ),
@@ -109,7 +113,7 @@ class _MapSearchBarState extends State<MapSearchBar> {
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF3B82F6)),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColorSchema.primary),
                 ),
               ),
           ],

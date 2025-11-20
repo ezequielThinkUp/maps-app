@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../../../../config/theme/color_schema.dart';
 import 'search_bar.dart';
 
 class RouteSearchBars extends StatelessWidget {
@@ -45,7 +46,7 @@ class RouteSearchBars extends StatelessWidget {
             isSearching: isFromSearching,
             showManualOption: showManualOption,
             placeholder: 'maps.search_from'.tr(),
-            accentColor: const Color(0xFF10B981), // Green color for origin
+            accentColor: AppColorSchema.secondary, // Green color for origin
           ),
 
           const SizedBox(height: 10),
@@ -59,7 +60,7 @@ class RouteSearchBars extends StatelessWidget {
             isSearching: isToSearching,
             showManualOption: showManualOption,
             placeholder: 'maps.search_to'.tr(),
-            accentColor: const Color(0xFFEF4444), // Red color for destination
+            accentColor: AppColorSchema.error, // Red color for destination
           ),
         ],
       ),

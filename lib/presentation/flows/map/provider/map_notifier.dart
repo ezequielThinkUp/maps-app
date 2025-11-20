@@ -39,8 +39,8 @@ class MapNotifier extends BaseStateNotifier<MapState, MapAction> {
       case ConfirmManualLocationAction():
         _confirmManualLocation();
         break;
-      case AddSelectedPlaceAction(:final place):
-        _addSelectedPlace(place);
+      case AddSelectedPlaceAction(:final place, :final placeId):
+        _addSelectedPlace(place, placeId: placeId);
         break;
       case RemoveSelectedPlaceAction(:final placeId):
         _removeSelectedPlace(placeId);
@@ -56,6 +56,23 @@ class MapNotifier extends BaseStateNotifier<MapState, MapAction> {
         break;
       case ClearRoutePolylinesAction():
         _clearRoutePolylines();
+        break;
+      case StartNavigationAction(:final route):
+        _startNavigation(route);
+        break;
+      case StopNavigationAction():
+        _stopNavigation();
+        break;
+      case UpdateNavigationProgressAction(
+        :final currentStepIndex,
+        :final remainingDistance,
+        :final remainingDuration,
+      ):
+        _updateNavigationProgress(
+          currentStepIndex: currentStepIndex,
+          remainingDistance: remainingDistance,
+          remainingDuration: remainingDuration,
+        );
         break;
     }
   }
@@ -99,9 +116,11 @@ class MapNotifier extends BaseStateNotifier<MapState, MapAction> {
     }
   }
 
-  void _addSelectedPlace(SearchResult place) {
+  void _addSelectedPlace(SearchResult place, {String? placeId}) {
     final updatedPlaces = Map<String, SearchResult>.from(state.selectedPlaces);
-    updatedPlaces[place.placeId ?? place.name] = place;
+    // Use provided placeId or fallback to place.placeId or place.name
+    final key = placeId ?? place.placeId ?? place.name;
+    updatedPlaces[key] = place;
 
     state = state.copyWith(
       selectedPlaces: updatedPlaces,
@@ -151,26 +170,84 @@ class MapNotifier extends BaseStateNotifier<MapState, MapAction> {
     state = state.copyWith(routePolylines: {});
   }
 
-  Future<void> getRouteToPlace(LatLng userLocation, SearchResult place) async {
-    try {
-      final directions = await _trafficService.getDirectionsFromLatLng(
-        originLat: userLocation.latitude,
-        originLng: userLocation.longitude,
-        destLat: place.location.latitude,
-        destLng: place.location.longitude,
-      );
+  Future<void> getRouteBetweenPlaces(LatLng origin, LatLng destination) async {
+    final directions = await _trafficService.getDirectionsFromLatLng(
+      originLat: origin.latitude,
+      originLng: origin.longitude,
+      destLat: destination.latitude,
+      destLng: destination.longitude,
+    );
 
-      if (directions.routes.isNotEmpty) {
-        final route = directions.routes.first;
-        final points = PolylineDecoder.decodePolyline(route.geometry);
-
-        reducer(
-          action: AddRoutePolylineAction(place.placeId ?? place.name, points),
-        );
-      }
-    } catch (e) {
-      print('Error getting route: $e');
+    if (directions.routes.isEmpty) {
+      throw Exception('No se encontró ninguna ruta entre los puntos seleccionados');
     }
+
+    final route = directions.routes.first;
+    final points = PolylineDecoder.decodePolyline(route.geometry);
+
+    if (points.isEmpty) {
+      throw Exception('Error al decodificar la ruta');
+    }
+
+    // Create route info
+    final routeInfo = RouteInfo(
+      totalDistance: route.distance,
+      totalDuration: route.duration,
+      routePoints: points,
+      summary: route.legs.isNotEmpty ? route.legs.first.summary : null,
+    );
+
+    // Use a fixed ID for the route between from and to
+    print('✅ [ROUTE] Route calculated successfully with ${points.length} points');
+    print('✅ [ROUTE] Distance: ${route.distance}m, Duration: ${route.duration}s');
+    
+    reducer(
+      action: AddRoutePolylineAction('route_from_to', points),
+    );
+    
+    // Store route info for navigation
+    state = state.copyWith(currentRoute: routeInfo);
+    
+    print('✅ [ROUTE] Polyline added to state');
+  }
+
+  void _startNavigation(RouteInfo route) {
+    state = state.copyWith(
+      isNavigating: true,
+      currentRoute: route,
+      isFollowingUser: true,
+      currentStepIndex: 0,
+      remainingDistance: route.totalDistance,
+      remainingDuration: route.totalDuration,
+    );
+    print('🚗 [NAVIGATION] Navigation started');
+  }
+
+  void _stopNavigation() {
+    state = state.copyWith(
+      isNavigating: false,
+      currentStepIndex: null,
+      remainingDistance: null,
+      remainingDuration: null,
+    );
+    print('🛑 [NAVIGATION] Navigation stopped');
+  }
+
+  void _updateNavigationProgress({
+    int? currentStepIndex,
+    double? remainingDistance,
+    double? remainingDuration,
+  }) {
+    state = state.copyWith(
+      currentStepIndex: currentStepIndex ?? state.currentStepIndex,
+      remainingDistance: remainingDistance ?? state.remainingDistance,
+      remainingDuration: remainingDuration ?? state.remainingDuration,
+    );
+  }
+
+  // Keep old method for backward compatibility if needed
+  Future<void> getRouteToPlace(LatLng userLocation, SearchResult place) async {
+    await getRouteBetweenPlaces(userLocation, place.location);
   }
 }
 

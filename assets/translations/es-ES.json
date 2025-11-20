@@ -54,7 +54,14 @@
             "center": "Centrar",
             "zoom_in": "Acercar",
             "zoom_out": "Alejar"
-        }
+        },
+        "calculating_route": "Calculando ruta...",
+        "route_calculated": "Ruta calculada exitosamente",
+        "start_navigation": "Iniciar Navegación",
+        "navigation_started": "Navegación iniciada",
+        "navigation_stopped": "Navegación detenida",
+        "navigation_active": "Navegando",
+        "duration": "Duración"
     },
     "errors": {
         "network": "Error de conexión",
@@ -74,7 +81,9 @@
             "route_cleared": "Ruta limpiada",
             "route_info": "Información de la ruta",
             "distance": "Distancia",
-            "points": "Puntos"
+            "points": "Puntos",
+            "route_error": "Error al calcular la ruta",
+            "no_route": "No hay ruta disponible"
         }
     }
 }

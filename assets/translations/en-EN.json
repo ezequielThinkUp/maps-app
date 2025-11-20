@@ -54,7 +54,14 @@
             "center": "Center",
             "zoom_in": "Zoom in",
             "zoom_out": "Zoom out"
-        }
+        },
+        "calculating_route": "Calculating route...",
+        "route_calculated": "Route calculated successfully",
+        "start_navigation": "Start Navigation",
+        "navigation_started": "Navigation started",
+        "navigation_stopped": "Navigation stopped",
+        "navigation_active": "Navigating",
+        "duration": "Duration"
     },
     "errors": {
         "network": "Connection error",
@@ -74,7 +81,9 @@
             "route_cleared": "Route cleared",
             "route_info": "Route information",
             "distance": "Distance",
-            "points": "Points"
+            "points": "Points",
+            "route_error": "Error calculating route",
+            "no_route": "No route available"
         }
     }
 }

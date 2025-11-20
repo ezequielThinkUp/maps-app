@@ -7,8 +7,12 @@ class MapState {
   final bool isManualLocationMode;
   final LatLng? manualSelectedLocation;
   final Map<String, SearchResult> selectedPlaces;
-  final Map<String, List<LatLng>>
-  routePolylines; // New field for route polylines
+  final Map<String, List<LatLng>> routePolylines;
+  final bool isNavigating;
+  final RouteInfo? currentRoute;
+  final int? currentStepIndex;
+  final double? remainingDistance;
+  final double? remainingDuration;
 
   const MapState({
     this.isMapInitialized = false,
@@ -16,7 +20,12 @@ class MapState {
     this.isManualLocationMode = false,
     this.manualSelectedLocation,
     this.selectedPlaces = const {},
-    this.routePolylines = const {}, // Initialize empty
+    this.routePolylines = const {},
+    this.isNavigating = false,
+    this.currentRoute,
+    this.currentStepIndex,
+    this.remainingDistance,
+    this.remainingDuration,
   });
 
   MapState copyWith({
@@ -26,6 +35,11 @@ class MapState {
     LatLng? manualSelectedLocation,
     Map<String, SearchResult>? selectedPlaces,
     Map<String, List<LatLng>>? routePolylines,
+    bool? isNavigating,
+    RouteInfo? currentRoute,
+    int? currentStepIndex,
+    double? remainingDistance,
+    double? remainingDuration,
   }) {
     return MapState(
       isMapInitialized: isMapInitialized ?? this.isMapInitialized,
@@ -35,6 +49,11 @@ class MapState {
           manualSelectedLocation ?? this.manualSelectedLocation,
       selectedPlaces: selectedPlaces ?? this.selectedPlaces,
       routePolylines: routePolylines ?? this.routePolylines,
+      isNavigating: isNavigating ?? this.isNavigating,
+      currentRoute: currentRoute ?? this.currentRoute,
+      currentStepIndex: currentStepIndex ?? this.currentStepIndex,
+      remainingDistance: remainingDistance ?? this.remainingDistance,
+      remainingDuration: remainingDuration ?? this.remainingDuration,
     );
   }
 
@@ -61,5 +80,33 @@ class MapState {
 
   @override
   String toString() =>
-      'MapState(isMapInitialized: $isMapInitialized, isFollowingUser: $isFollowingUser, isManualLocationMode: $isManualLocationMode, manualSelectedLocation: $manualSelectedLocation, selectedPlaces: ${selectedPlaces.length}, routePolylines: ${routePolylines.length})';
+      'MapState(isMapInitialized: $isMapInitialized, isFollowingUser: $isFollowingUser, isManualLocationMode: $isManualLocationMode, manualSelectedLocation: $manualSelectedLocation, selectedPlaces: ${selectedPlaces.length}, routePolylines: ${routePolylines.length}, isNavigating: $isNavigating)';
+}
+
+class RouteInfo {
+  final double totalDistance;
+  final double totalDuration;
+  final List<LatLng> routePoints;
+  final String? summary;
+
+  const RouteInfo({
+    required this.totalDistance,
+    required this.totalDuration,
+    required this.routePoints,
+    this.summary,
+  });
+
+  RouteInfo copyWith({
+    double? totalDistance,
+    double? totalDuration,
+    List<LatLng>? routePoints,
+    String? summary,
+  }) {
+    return RouteInfo(
+      totalDistance: totalDistance ?? this.totalDistance,
+      totalDuration: totalDuration ?? this.totalDuration,
+      routePoints: routePoints ?? this.routePoints,
+      summary: summary ?? this.summary,
+    );
+  }
 }

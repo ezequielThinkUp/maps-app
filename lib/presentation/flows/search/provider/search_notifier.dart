@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../services/places_service.dart';
 import '../../../../models/models.dart';
 import '../../../base/base_state_notifier.dart';
